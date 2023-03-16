@@ -14,7 +14,9 @@ public static class GptCore
 
     static string Translate(string lang)
     {
+        
         return "d";
+
     }
 
 
