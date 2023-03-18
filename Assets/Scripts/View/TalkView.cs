@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
+
 
 public class TalkView : MonoBehaviour
 {
@@ -17,9 +19,10 @@ public class TalkView : MonoBehaviour
         
     }
 
-    public InputField chatWindow;
+    public TMP_InputField chatWindow;
     public GameObject chatPanel;
-    public Text life;
+    public TextMeshProUGUI life;
     public GameObject adInducationPanel;
     public Button talkButton;
+    public Button nextButton;
 }

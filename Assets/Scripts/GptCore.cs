@@ -3,19 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
-public static class GptCore 
+public class GptCore 
 {
     static ReactiveDictionary<EMOTIONS, int> emotionData = new ReactiveDictionary<EMOTIONS, int>();
 
-    static string ChatGPT(string question)
+    string apiKey;
+
+    public GptCore(string apiKey)
     {
-        return "d";
+        this.apiKey = apiKey;
     }
 
-    static string Translate(string lang)
+    public string ChatGPT(string question)
+    {
+        return "chat gpt";
+    }
+
+    string Translate(string lang)
     {
         
-        return "d";
+        return "translate";
 
     }
 
