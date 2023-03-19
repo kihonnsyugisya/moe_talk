@@ -12,7 +12,7 @@ public class Presenter : MonoBehaviour
     void Start()
     {
         talkView.talkButton.OnClickAsObservable().Subscribe( _=> talkModel.ShowChatWindow(talkView.chatWindow)).AddTo(this);
-        talkView.chatWindow.onEndEdit.AsObservable().Subscribe(q=> talkModel.ShowAns(talkModel.gptInstance.ChatGPT(q),talkView.chatPanel)).AddTo(this);
+        //talkView.chatWindow.onEndEdit.AsObservable().Subscribe(q=> talkModel.ShowAns(talkModel.gptInstance.ChatGPT(q),talkView.chatPanel)).AddTo(this);
         talkView.nextButton.OnClickAsObservable().Subscribe(_=> talkModel.CloseAns(talkView.chatPanel)).AddTo(this);
 
     }
