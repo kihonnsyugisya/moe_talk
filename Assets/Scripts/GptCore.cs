@@ -9,18 +9,21 @@ public class GptCore
 {
     static ReactiveDictionary<EMOTIONS, int> emotionData = new ReactiveDictionary<EMOTIONS, int>();
 
-    const string API_URL = "https://api.openai.com/v1/completions";
+    // const string API_URL = "https://api.openai.com/v1/completions";
+    const string API_URL = "https://api.openai.com/v1/chat/completions";
+    // 参考URL　https://1-notes.com/implement-chatgpt-model-api/
+
     private string API_KEY = env.CHAT_GPT_API_KEY;
 
     public class JsonRequestBody
     {
         public string model;
-        public string pronpt;
-        public string temperature;
-        public string max_tokens;
+        public string content;
+        public float temperature;
+        public int max_tokens;
     }
 
-    public async UniTask<string> ChatGPT(string pronpt)
+    public async UniTask<string> ChatGPT(string content)
     {
         var request = new UnityWebRequest(API_URL, "POST");
         request.SetRequestHeader("Authorization", "Bearer " + API_KEY);
@@ -34,9 +37,9 @@ public class GptCore
 
         JsonRequestBody jsonRequestBody = new JsonRequestBody();
         jsonRequestBody.model = "gpt-3.5-turbo";
-        jsonRequestBody.pronpt = pronpt;
-        jsonRequestBody.temperature = "0.5";
-        jsonRequestBody.max_tokens = "30";
+        jsonRequestBody.content = content;
+        jsonRequestBody.temperature = 0.5f;
+        jsonRequestBody.max_tokens = 30;
 
         string jsonData = JsonUtility.ToJson(jsonRequestBody);
 
