@@ -5,17 +5,27 @@ using UniRx;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 public class GptCore 
 {
     public GptCore() { InitialGPT(); }
-    static ReactiveDictionary<EMOTIONS, int> emotionData = new ReactiveDictionary<EMOTIONS, int>();
+    static ReactiveDictionary<EMOTIONS, int> emotionDatas = new ReactiveDictionary<EMOTIONS, int>();
 
     const string API_URL = "https://api.openai.com/v1/chat/completions";
     private string API_KEY = env.CHAT_GPT_API_KEY;
     const float TEMPERATURE = 0.5f;
-    const int MAX_TOKENS = 50;
+    const int MAX_TOKENS = 80;
     const string MODEL = "gpt-3.5-turbo";
+
+    public Dictionary<EMOTIONS, int> emotionData = new Dictionary<EMOTIONS, int>()
+    {
+        {EMOTIONS.HAPPY,0},
+        {EMOTIONS.LOVE,0},
+        {EMOTIONS.SAD,0},
+        {EMOTIONS.FEAR,0},
+    };
+
 
     [System.Serializable]
     public class Message
@@ -35,21 +45,23 @@ public class GptCore
     readonly Message initialMessage = new()
     {
         role = "system",
-        content = @"以下の条件に従って、疑似的な感情をもつチャットボットとしてロールプレイをします。
-                以後の会話では、あなたは下記の4つの感情パラメーターを持つかのように、振る舞うものとします。
-                各感情パラメーターは会話を通じて変動するものとします。
-                現在の感情パラメーターの値を反映するように、あなたの返答のトーンや発言は変化します。
-                以後の会話ではまず現在の感情パラメータを出力し、その後に会話を出力してください。
-                出力形式は以下のjsonフォーマットとします。このフォーマット以外で会話しないでください。
-                {
-                    emotion: {
-                        joy: 0~5,
-                        fun: 0~5,
-                        anger: 0~5,
-                        sad: 0~5,
-                    }
-                    message: ""会話の文章""
-                } "
+        content = @"According to the following conditions, role-play as a chatbot with pseudo-emotions.
+                 In subsequent conversations, we assume that you behave as if you possess the following four emotional parameters:
+                 HAPPY, LOVE, SAD, ANGRY, FEAR
+                 Each emotional parameter shall fluctuate throughout the conversation.
+                 The tone or utterance of your response will change to reflect the current value of your emotional parameter.
+                 In subsequent conversations, first output the current emotion parameters, and then output the conversation in Japanese.
+                 The output format is the following json format. Please do not communicate outside of this format.
+            
+                 {
+                     emotion: {
+                         HAPPY: 0~5,
+                         LOVE: 0~5,
+                         SAD: 0~5,
+                         FEAR: 0~5,
+                     }
+                     message: ""conversation text""
+                 }"
     };
 
     private readonly List<Message> messageBox = new List<Message>();
@@ -116,12 +128,7 @@ public class GptCore
         Message messageResponseParam = JsonConvert.DeserializeObject<Message>(choicesResponseParam[0]["message"].ToString());
         //Debug.Log(messageResponseParam.content);
 
-        string RemoveNewLines(string input)
-        {
-            return input.Replace("\n", "").Replace("\r", "");
-        }
-
-        string result = RemoveNewLines(messageResponseParam.content);
+        string result = messageResponseParam.content;
 
         Message assistantMessage = new()
         {
@@ -129,8 +136,19 @@ public class GptCore
             content = result
         };
 
-        //Message[] d = (Message[])requestParam["messages"];
-        //Debug.Log(d);
+        //Debug.Log(result);
+
+        messageBox.Add(assistantMessage);
+
+        result = messageResponseParam.content;
+
+
+        Dictionary<string,object> avatarReactionDictionary = JsonConvert.DeserializeObject<Dictionary<string,object>>(result);
+        result = avatarReactionDictionary["message"].ToString();
+
+        emotionData = JsonConvert.DeserializeObject<Dictionary<EMOTIONS,int>>(avatarReactionDictionary["emotion"].ToString());
+
+        Debug.Log(emotionData[EMOTIONS.HAPPY]);
 
         return result;
     }
@@ -146,5 +164,25 @@ public class GptCore
 
 public enum EMOTIONS
 {
-    HAPPY,LOVE,SAD,ANGRY,FEAR 
+    HAPPY,LOVE,SAD,ANGRY,FEAR
 }
+
+//プロンプトの日本語文（これを翻訳してsystemにぶち込む）
+
+//@"以下の条件に従って、疑似的な感情をもつチャットボットとしてロールプレイをします。
+//                以後の会話では、あなたは下記の4つの感情パラメーターを持つかのように、振る舞うものとします。
+//                HAPPY,LOVE,SAD,ANGRY,FEAR
+//                各感情パラメーターは会話を通じて変動するものとします。
+//                現在の感情パラメーターの値を反映するように、あなたの返答のトーンや発言は変化します。
+//                以後の会話ではまず現在の感情パラメータを出力し、その後に会話を日本語で出力してください。
+//                出力形式は以下のjsonフォーマットとします。このフォーマット以外で会話しないでください。
+            
+//                
+//                    emotion: {
+//                        HAPPY: 0~5,
+//                        LOVE: 0~5,
+//                        SAD: 0~5,
+//                        FEAR: 0~5,
+//                    }
+//                    message: ""会話の文章""
+//                "
