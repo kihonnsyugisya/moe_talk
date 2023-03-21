@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 
 public class GptCore 
 {
+    public GptCore() { InitialGPT(); }
     static ReactiveDictionary<EMOTIONS, int> emotionData = new ReactiveDictionary<EMOTIONS, int>();
 
     const string API_URL = "https://api.openai.com/v1/chat/completions";
@@ -31,14 +32,32 @@ public class GptCore
 
     [SerializeField] Dictionary<string, object> requestParam = new Dictionary<string, object>();
 
-
-    Message initialMessage = new()
+    readonly Message initialMessage = new()
     {
         role = "system",
-        content = "あなたは親しみのある可愛いアイドルです。"
+        content = @"以下の条件に従って、疑似的な感情をもつチャットボットとしてロールプレイをします。
+                以後の会話では、あなたは下記の4つの感情パラメーターを持つかのように、振る舞うものとします。
+                各感情パラメーターは会話を通じて変動するものとします。
+                現在の感情パラメーターの値を反映するように、あなたの返答のトーンや発言は変化します。
+                以後の会話ではまず現在の感情パラメータを出力し、その後に会話を出力してください。
+                出力形式は以下のjsonフォーマットとします。このフォーマット以外で会話しないでください。
+                {
+                    emotion: {
+                        joy: 0~5,
+                        fun: 0~5,
+                        anger: 0~5,
+                        sad: 0~5,
+                    }
+                    message: ""会話の文章""
+                } "
     };
 
-    private List<Message> messageBox = new List<Message>();
+    private readonly List<Message> messageBox = new List<Message>();
+
+    public void InitialGPT()
+    {
+        messageBox.Add(initialMessage);
+    }
 
     public async UniTask<string> ChatGPT(string content)
     {
@@ -51,13 +70,12 @@ public class GptCore
             role = "user",
             content = content
         };
+        messageBox.Add(userMessage);
 
         requestParam.Add("model", MODEL);
-        //requestParam.Add("messages", new Message[] { userMessage });
-        requestParam.Add("messages", new List<Message>() { userMessage });
-
         requestParam.Add("temperature", TEMPERATURE);
         requestParam.Add("max_tokens", MAX_TOKENS);
+        requestParam.Add("messages", messageBox);
 
         string jsonData = JsonConvert.SerializeObject(requestParam, Formatting.Indented);
 
