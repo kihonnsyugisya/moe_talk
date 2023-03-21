@@ -17,7 +17,7 @@ public class GptCore
     const string MODEL = "gpt-3.5-turbo";
 
     [System.Serializable]
-    public class UserMessage
+    public class Message
     {
         public string role;
         public string content;
@@ -31,18 +31,31 @@ public class GptCore
 
     [SerializeField] Dictionary<string, object> requestParam = new Dictionary<string, object>();
 
+
+    Message initialMessage = new()
+    {
+        role = "system",
+        content = "あなたは親しみのある可愛いアイドルです。"
+    };
+
+    private List<Message> messageBox = new List<Message>();
+
     public async UniTask<string> ChatGPT(string content)
     {
         using var request = new UnityWebRequest(API_URL, "POST");
         request.SetRequestHeader("Authorization", "Bearer " + API_KEY);
         request.SetRequestHeader("Content-Type", "application/json");
 
-        UserMessage userMessage = new UserMessage();
-        userMessage.role = "user";
-        userMessage.content = content;
+        Message userMessage = new ()
+        {
+            role = "user",
+            content = content
+        };
 
         requestParam.Add("model", MODEL);
-        requestParam.Add("messages", new UserMessage[] { userMessage });
+        //requestParam.Add("messages", new Message[] { userMessage });
+        requestParam.Add("messages", new List<Message>() { userMessage });
+
         requestParam.Add("temperature", TEMPERATURE);
         requestParam.Add("max_tokens", MAX_TOKENS);
 
@@ -82,7 +95,7 @@ public class GptCore
         List<Dictionary<string, object>> choicesResponseParam = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(responseParam["choices"].ToString());
         //Debug.Log(choicesResponseParam[0]["message"]);
 
-        UserMessage messageResponseParam = JsonConvert.DeserializeObject<UserMessage>(choicesResponseParam[0]["message"].ToString());
+        Message messageResponseParam = JsonConvert.DeserializeObject<Message>(choicesResponseParam[0]["message"].ToString());
         //Debug.Log(messageResponseParam.content);
 
         string RemoveNewLines(string input)
@@ -90,7 +103,18 @@ public class GptCore
             return input.Replace("\n", "").Replace("\r", "");
         }
 
-        return RemoveNewLines(messageResponseParam.content);
+        string result = RemoveNewLines(messageResponseParam.content);
+
+        Message assistantMessage = new()
+        {
+            role = "assistant",
+            content = result
+        };
+
+        //Message[] d = (Message[])requestParam["messages"];
+        //Debug.Log(d);
+
+        return result;
     }
 
     string Translate(string lang)

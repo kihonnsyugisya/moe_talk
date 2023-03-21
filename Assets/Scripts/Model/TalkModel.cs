@@ -12,7 +12,9 @@ public class TalkModel : MonoBehaviour
     async void Start()
     {
         gptInstance = new GptCore();
-        await gptInstance.ChatGPT("応答してください");
+        
+        var enter = await gptInstance.ChatGPT("応答してください");
+        Debug.Log(enter);
     }
 
     // Update is called once per frame
