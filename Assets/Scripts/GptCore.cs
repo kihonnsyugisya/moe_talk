@@ -4,47 +4,51 @@ using UnityEngine;
 using UniRx;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Networking;
+using Newtonsoft.Json;
 
 public class GptCore 
 {
     static ReactiveDictionary<EMOTIONS, int> emotionData = new ReactiveDictionary<EMOTIONS, int>();
 
-    // const string API_URL = "https://api.openai.com/v1/completions";
     const string API_URL = "https://api.openai.com/v1/chat/completions";
-    // 参考URL　https://1-notes.com/implement-chatgpt-model-api/
-
     private string API_KEY = env.CHAT_GPT_API_KEY;
+    const float TEMPERATURE = 0.5f;
+    const int MAX_TOKENS = 50;
+    const string MODEL = "gpt-3.5-turbo";
 
-    public class JsonRequestBody
+    [System.Serializable]
+    public class UserMessage
     {
-        public string model;
+        public string role;
         public string content;
-        public float temperature;
-        public int max_tokens;
     }
+
+    [System.Serializable]
+    public class JsonRequestBodyMessage
+    {
+        public string[] messages;
+    }
+
+    [SerializeField] Dictionary<string, object> requestParam = new Dictionary<string, object>();
 
     public async UniTask<string> ChatGPT(string content)
     {
-        var request = new UnityWebRequest(API_URL, "POST");
+        using var request = new UnityWebRequest(API_URL, "POST");
         request.SetRequestHeader("Authorization", "Bearer " + API_KEY);
         request.SetRequestHeader("Content-Type", "application/json");
 
-        //Dictionary<string, object> requestParam = new Dictionary<string, object>();
-        //requestParam.Add("model", "gpt-3.5-turbo");
-        //requestParam.Add("prompt", "Hello, how are you?");
-        //requestParam.Add("temperature", 0.5f);
-        //requestParam.Add("max_tokens", 50);
+        UserMessage userMessage = new UserMessage();
+        userMessage.role = "user";
+        userMessage.content = content;
 
-        JsonRequestBody jsonRequestBody = new JsonRequestBody();
-        jsonRequestBody.model = "gpt-3.5-turbo";
-        jsonRequestBody.content = content;
-        jsonRequestBody.temperature = 0.5f;
-        jsonRequestBody.max_tokens = 30;
+        requestParam.Add("model", MODEL);
+        requestParam.Add("messages", new UserMessage[] { userMessage });
+        requestParam.Add("temperature", TEMPERATURE);
+        requestParam.Add("max_tokens", MAX_TOKENS);
 
-        string jsonData = JsonUtility.ToJson(jsonRequestBody);
+        string jsonData = JsonConvert.SerializeObject(requestParam, Formatting.Indented);
 
-        //string jsonData = JsonUtility.ToJson(requestParam);
-
+        //Debug.Log(jsonData);
 
         byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
 
@@ -52,6 +56,7 @@ public class GptCore
         request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
 
         await request.SendWebRequest();
+
 
         // HTTPレスポンスの受信と解析
         if (request.result != UnityWebRequest.Result.Success)
@@ -64,11 +69,28 @@ public class GptCore
         {
             string responseText = request.downloadHandler.text;
             Debug.Log($"HTTP Response Body: {responseText}");
-            Debug.Log("成功");
+            Debug.Log(content);
         }
 
-        return System.Text.Encoding.UTF8.GetString(request.downloadHandler.data);
 
+        string encodingResult = System.Text.Encoding.UTF8.GetString(request.downloadHandler.data);
+        //Debug.Log(result);
+
+        Dictionary<string, object> responseParam = JsonConvert.DeserializeObject<Dictionary<string, object>>(encodingResult);
+        //Debug.Log(responseParam["choices"]);
+
+        List<Dictionary<string, object>> choicesResponseParam = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(responseParam["choices"].ToString());
+        //Debug.Log(choicesResponseParam[0]["message"]);
+
+        UserMessage messageResponseParam = JsonConvert.DeserializeObject<UserMessage>(choicesResponseParam[0]["message"].ToString());
+        //Debug.Log(messageResponseParam.content);
+
+        string RemoveNewLines(string input)
+        {
+            return input.Replace("\n", "").Replace("\r", "");
+        }
+
+        return RemoveNewLines(messageResponseParam.content);
     }
 
     string Translate(string lang)
