@@ -13,8 +13,8 @@ public class TalkModel : MonoBehaviour
     {
         gptInstance = new GptCore();
         
-        var enter = await gptInstance.ChatGPT("応答してください");
-        Debug.Log(enter);
+        //var enter = await gptInstance.ChatGPT("応答してください");
+        //Debug.Log(enter);
     }
 
     // Update is called once per frame
@@ -29,8 +29,9 @@ public class TalkModel : MonoBehaviour
 
     public void ShowAns(string ans,GameObject ChatPanel)
     {
+        Debug.Log("call");
         ChatPanel.SetActive(true);
-        Text ansewerText = ChatPanel.transform.GetChild(0).GetComponent<Text>();
+        TextMeshProUGUI ansewerText = ChatPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         ansewerText.text = ans;
     }
 
@@ -42,7 +43,7 @@ public class TalkModel : MonoBehaviour
     public void ShowChatWindow(TMP_InputField chatWindow)
     {
         chatWindow.Select();
-        Debug.Log(chatWindow.text);
+        //Debug.Log(chatWindow.text);
 
     }
 
