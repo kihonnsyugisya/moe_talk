@@ -84,10 +84,12 @@ public class GptCore
         };
         messageBox.Add(userMessage);
 
-        requestParam.Add("model", MODEL);
-        requestParam.Add("temperature", TEMPERATURE);
-        requestParam.Add("max_tokens", MAX_TOKENS);
-        requestParam.Add("messages", messageBox);
+        if(!requestParam.ContainsKey("model")) requestParam.Add("model", MODEL);
+        if (!requestParam.ContainsKey("temperature")) requestParam.Add("temperature", TEMPERATURE);
+        if (!requestParam.ContainsKey("max_tokens")) requestParam.Add("max_tokens", MAX_TOKENS);
+
+        if (!requestParam.ContainsKey("messages")) requestParam.Add("messages", messageBox);
+        else requestParam["messages"] = messageBox;
 
         string jsonData = JsonConvert.SerializeObject(requestParam, Formatting.Indented);
 
