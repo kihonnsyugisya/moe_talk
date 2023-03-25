@@ -7,7 +7,18 @@ public class ShopModel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-            CBNativeDialog.Instance.Show(
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void ShowAdInducationView()
+    {
+        CBNativeDialog.Instance.Show(
             title: "ライフが足りません",
             message: "このトークを続けるには1つのライフが必要です。",
             positiveButtonTitle: "ショップを開く",
@@ -15,11 +26,5 @@ public class ShopModel : MonoBehaviour
             negativeButtonTitle: "キャンセル",
             negativeButtonAction: () => Debug.Log("dad")
         );
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
