@@ -15,7 +15,7 @@ public class GptCore
     const string API_URL = "https://api.openai.com/v1/chat/completions";
     private string API_KEY = env.CHAT_GPT_API_KEY;
     const float TEMPERATURE = 0.5f;
-    const int MAX_TOKENS = 80;
+    const int MAX_TOKENS = 1000;
     const string MODEL = "gpt-3.5-turbo";
 
     public Dictionary<EMOTIONS, int> emotionData = new Dictionary<EMOTIONS, int>()
