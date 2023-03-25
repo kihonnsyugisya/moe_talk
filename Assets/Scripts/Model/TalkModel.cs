@@ -29,22 +29,39 @@ public class TalkModel : MonoBehaviour
 
     public void ShowAns(string ans,GameObject ChatPanel)
     {
-        Debug.Log("call");
         ChatPanel.SetActive(true);
         TextMeshProUGUI ansewerText = ChatPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         ansewerText.text = ans;
+        //Debug.Log("show ans");
     }
 
     public void CloseAns(GameObject ChatPanel)
     {
         ChatPanel.SetActive(false);
+        //Debug.Log("close ans");
     }
 
     public void ShowChatWindow(TMP_InputField chatWindow)
     {
         chatWindow.Select();
-        //Debug.Log(chatWindow.text);
+        //Debug.Log("show chatwoidow");
 
+    }
+
+    public void OnDeselectChatWindow(Button talkButton)
+    {
+        talkButton.image.color = SelectColors.defaultButtonColor;
+    }
+
+    public void OnSelectChatWindow(Button talkButton)
+    {
+        talkButton.image.color =  SelectColors.themeColor; 
+    }
+
+    public void CleanChatWindow(TMP_InputField chatWindow)
+    {
+        chatWindow.text = "";
+        //Debug.Log("clean chat window");
     }
 
     
