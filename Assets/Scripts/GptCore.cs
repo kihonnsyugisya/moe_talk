@@ -132,11 +132,20 @@ public class GptCore
 
         string result = messageResponseParam.content;
 
+        Dictionary<string, object> avatarReactionDictionary;
 
-        Dictionary<string, object> avatarReactionDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(result);
-        result = avatarReactionDictionary["message"].ToString();
-
-        emotionData = JsonConvert.DeserializeObject<Dictionary<EMOTIONS, int>>(avatarReactionDictionary["emotion"].ToString());
+        try
+        {
+            avatarReactionDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(result);
+            result = avatarReactionDictionary["message"].ToString();
+            emotionData = JsonConvert.DeserializeObject<Dictionary<EMOTIONS, int>>(avatarReactionDictionary["emotion"].ToString());
+        }
+        catch (JsonReaderException e)
+        {
+            //Debug.Log("前提条件を再セット");
+            //InitialGPT();
+            Debug.Log(e);
+        }
 
         Debug.Log(emotionData[EMOTIONS.HAPPY]);
 
