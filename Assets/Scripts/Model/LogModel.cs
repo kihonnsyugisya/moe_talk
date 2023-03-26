@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using TMPro;
+using Cysharp.Threading.Tasks;
+using System;
 
 public class LogModel : MonoBehaviour
 {
@@ -15,7 +17,6 @@ public class LogModel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public void ShowLog(GameObject logPanel)
@@ -34,7 +35,12 @@ public class LogModel : MonoBehaviour
 
         TextMeshProUGUI contentsText = contentsInstance.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
         contentsText.text = content;
-        contentsText.rectTransform.sizeDelta = new Vector2(contentsText.rectTransform.sizeDelta.x, contentsText.preferredHeight);
+        //float contentBoxHeight = contentsText.rectTransform.sizeDelta.y;
+        //contentsText.ForceMeshUpdate();
+        //int contentLine = contentsText.textInfo.lineCount;
+        //contentsText.rectTransform.sizeDelta = new Vector2(contentsText.rectTransform.sizeDelta.x,contentLine * contentBoxHeight);
+
+        //contentsText.rectTransform.sizeDelta = new Vector2(contentsText.rectTransform.sizeDelta.x, contentsText.preferredHeight);
     }
 
     public BoolReactiveProperty isShowLog = new BoolReactiveProperty(false); 
