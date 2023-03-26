@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 
 public class LogView : MonoBehaviour
@@ -21,9 +18,8 @@ public class LogView : MonoBehaviour
 
     public Button logButton;
     public GameObject logPanel;
+    public Transform contentsBox;
     public GameObject userContentsPanel;
-    public TextMeshProUGUI userContentsText;
     public GameObject aiContentsPanel;
-    public TextMeshProUGUI aiContentsText;
 }
     

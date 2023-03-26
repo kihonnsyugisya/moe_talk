@@ -40,7 +40,7 @@ public class GptCore
         public string[] messages;
     }
 
-    [SerializeField] Dictionary<string, object> requestParam = new Dictionary<string, object>();
+    public Dictionary<string, object> requestParam = new Dictionary<string, object>();
 
     readonly Message initialMessage = new()
     {
@@ -64,7 +64,7 @@ public class GptCore
                  }"
     };
 
-    private readonly List<Message> messageBox = new List<Message>();
+    public static readonly ReactiveCollection<Message> messageBox = new ReactiveCollection<Message>();
 
     public void InitialGPT()
     {

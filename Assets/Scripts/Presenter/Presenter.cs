@@ -9,6 +9,8 @@ public class Presenter : MonoBehaviour
 {
     public TalkView talkView;
     public TalkModel talkModel;
+    public LogView logView;
+    public LogModel logModel;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +27,13 @@ public class Presenter : MonoBehaviour
         talkView.nextButton.OnClickAsObservable().Subscribe(_=> talkModel.CloseAns(talkView.chatPanel)).AddTo(this);
         talkView.chatWindow.onSelect.AddListener(_ => talkModel.OnSelectChatWindow(talkView.talkButton));
         talkView.chatWindow.onDeselect.AddListener(_=> talkModel.OnDeselectChatWindow(talkView.talkButton));
+
+        GptCore.messageBox
+            .ObserveAdd()
+            .Where(message => message.Value.role != "system")
+            .Subscribe(message => logModel.GenaleteLogContents(message.Value.role,message.Value.content,logView))
+            .AddTo(this);
+        logView.logButton.OnClickAsObservable().Subscribe(_=>logModel.ShowLog(logView.logPanel)).AddTo(this);
     }
 
     // Update is called once per frame
