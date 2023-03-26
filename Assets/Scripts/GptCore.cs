@@ -40,7 +40,7 @@ public class GptCore
         public string[] messages;
     }
 
-    [SerializeField] Dictionary<string, object> requestParam = new Dictionary<string, object>();
+    public Dictionary<string, object> requestParam = new Dictionary<string, object>();
 
     readonly Message initialMessage = new()
     {
@@ -64,7 +64,7 @@ public class GptCore
                  }"
     };
 
-    private readonly List<Message> messageBox = new List<Message>();
+    public static readonly ReactiveCollection<Message> messageBox = new ReactiveCollection<Message>();
 
     public void InitialGPT()
     {
@@ -132,6 +132,24 @@ public class GptCore
 
         string result = messageResponseParam.content;
 
+        Dictionary<string, object> avatarReactionDictionary;
+
+        try
+        {
+            avatarReactionDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(result);
+            result = avatarReactionDictionary["message"].ToString();
+            emotionData = JsonConvert.DeserializeObject<Dictionary<EMOTIONS, int>>(avatarReactionDictionary["emotion"].ToString());
+        }
+        catch (JsonReaderException e)
+        {
+            //Debug.Log("前提条件を再セット");
+            //InitialGPT();
+            Debug.Log(e);
+        }
+
+        Debug.Log(emotionData[EMOTIONS.HAPPY]);
+
+
         Message assistantMessage = new()
         {
             role = "assistant",
@@ -141,16 +159,6 @@ public class GptCore
         //Debug.Log(result);
 
         messageBox.Add(assistantMessage);
-
-        result = messageResponseParam.content;
-
-
-        Dictionary<string,object> avatarReactionDictionary = JsonConvert.DeserializeObject<Dictionary<string,object>>(result);
-        result = avatarReactionDictionary["message"].ToString();
-
-        emotionData = JsonConvert.DeserializeObject<Dictionary<EMOTIONS,int>>(avatarReactionDictionary["emotion"].ToString());
-
-        Debug.Log(emotionData[EMOTIONS.HAPPY]);
 
         return result;
     }
