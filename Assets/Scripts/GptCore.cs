@@ -132,6 +132,15 @@ public class GptCore
 
         string result = messageResponseParam.content;
 
+
+        Dictionary<string, object> avatarReactionDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(result);
+        result = avatarReactionDictionary["message"].ToString();
+
+        emotionData = JsonConvert.DeserializeObject<Dictionary<EMOTIONS, int>>(avatarReactionDictionary["emotion"].ToString());
+
+        Debug.Log(emotionData[EMOTIONS.HAPPY]);
+
+
         Message assistantMessage = new()
         {
             role = "assistant",
@@ -141,16 +150,6 @@ public class GptCore
         //Debug.Log(result);
 
         messageBox.Add(assistantMessage);
-
-        result = messageResponseParam.content;
-
-
-        Dictionary<string,object> avatarReactionDictionary = JsonConvert.DeserializeObject<Dictionary<string,object>>(result);
-        result = avatarReactionDictionary["message"].ToString();
-
-        emotionData = JsonConvert.DeserializeObject<Dictionary<EMOTIONS,int>>(avatarReactionDictionary["emotion"].ToString());
-
-        Debug.Log(emotionData[EMOTIONS.HAPPY]);
 
         return result;
     }
