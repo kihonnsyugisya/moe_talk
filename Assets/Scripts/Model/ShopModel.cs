@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
+using TMPro;
 
 public class ShopModel : MonoBehaviour
 {
@@ -16,6 +18,9 @@ public class ShopModel : MonoBehaviour
         
     }
 
+    public BoolReactiveProperty isShowShop = new BoolReactiveProperty(false);
+
+
     public void ShowAdInducationView()
     {
         CBNativeDialog.Instance.Show(
@@ -27,4 +32,12 @@ public class ShopModel : MonoBehaviour
             negativeButtonAction: () => Debug.Log("dad")
         );
     }
+
+    public void ShowShop(GameObject shopPanel)
+    {
+        isShowShop.Value = !isShowShop.Value;
+        shopPanel.SetActive(isShowShop.Value);
+    }
+
+
 }

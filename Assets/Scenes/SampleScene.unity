@@ -2274,6 +2274,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 107bb21de0f3947958812dcc3dc29f81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isShowShop:
+    value: 0
 --- !u!4 &830257367
 Transform:
   m_ObjectHideFlags: 0
@@ -3395,6 +3397,7 @@ GameObject:
   - component: {fileID: 1173150069}
   - component: {fileID: 1173150068}
   - component: {fileID: 1173150070}
+  - component: {fileID: 1173150071}
   m_Layer: 0
   m_Name: View
   m_TagString: Untagged
@@ -3452,6 +3455,23 @@ MonoBehaviour:
   contentsBox: {fileID: 1240484051}
   userContentsPanel: {fileID: 973282670}
   aiContentsPanel: {fileID: 2086694838}
+--- !u!114 &1173150071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173150067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae13aef9b824789b105c18fe36a14b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopButton: {fileID: 224401512}
+  rewardButton: {fileID: 1472554805}
+  billingButton: {fileID: 1660074368}
+  yourLifePoint: {fileID: 222317521}
+  shopPanel: {fileID: 1351069071}
 --- !u!1 &1205093903
 GameObject:
   m_ObjectHideFlags: 0
@@ -4148,6 +4168,8 @@ MonoBehaviour:
   talkModel: {fileID: 830257365}
   logView: {fileID: 1173150070}
   logModel: {fileID: 830257368}
+  shopView: {fileID: 1173150071}
+  shopModel: {fileID: 830257366}
 --- !u!4 &1295259702
 Transform:
   m_ObjectHideFlags: 0

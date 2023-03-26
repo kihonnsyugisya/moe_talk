@@ -11,6 +11,8 @@ public class Presenter : MonoBehaviour
     public TalkModel talkModel;
     public LogView logView;
     public LogModel logModel;
+    public ShopView shopView;
+    public ShopModel shopModel;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +36,8 @@ public class Presenter : MonoBehaviour
             .Subscribe(message => logModel.GenaleteLogContents(message.Value.role,message.Value.content,logView))
             .AddTo(this);
         logView.logButton.OnClickAsObservable().Subscribe(_=>logModel.ShowLog(logView.logPanel)).AddTo(this);
+
+        shopView.shopButton.OnClickAsObservable().Subscribe(_=>shopModel.ShowShop(shopView.shopPanel)).AddTo(this);
     }
 
     // Update is called once per frame
