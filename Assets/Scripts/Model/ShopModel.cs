@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using TMPro;
+using UnityEngine.UI;
 
 public class ShopModel : MonoBehaviour
 {
@@ -39,5 +40,8 @@ public class ShopModel : MonoBehaviour
         shopPanel.SetActive(isShowShop.Value);
     }
 
-
+    public void DisableRewardButton(Button rewardButton,bool isInteractable)
+    {
+        rewardButton.interactable = isInteractable;
+    }
 }

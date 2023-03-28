@@ -40,6 +40,8 @@ public class Presenter : MonoBehaviour
 
         shopView.shopButton.OnClickAsObservable().Subscribe(_=>shopModel.ShowShop(shopView.shopPanel)).AddTo(this);
         shopView.rewardButton.OnClickAsObservable().Subscribe(_=>adMobModel.ShowRewardeAd()).AddTo(this);
+
+        adMobModel.isOnAdLoadedRewardedAd.Subscribe(_=>shopModel.DisableRewardButton(shopView.rewardButton,adMobModel.isOnAdLoadedRewardedAd.Value)).AddTo(this);
     }
 
     // Update is called once per frame

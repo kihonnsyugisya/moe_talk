@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4274,7 +4274,7 @@ MonoBehaviour:
   logModel: {fileID: 830257368}
   shopView: {fileID: 1173150071}
   shopModel: {fileID: 830257366}
-  adMobManager: {fileID: 1728546711}
+  adMobModel: {fileID: 1728546711}
 --- !u!4 &1295259702
 Transform:
   m_ObjectHideFlags: 0
@@ -5333,20 +5333,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1472554806}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 314299474}
-        m_TargetAssemblyTypeName: GoogleMobileAds.Placement.RewardedAdGameObject,
-          GoogleMobileAds.Placement
-        m_MethodName: ShowIfLoaded
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1472554806
 MonoBehaviour:
   m_ObjectHideFlags: 0
