@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using Cysharp.Threading.Tasks;
-
+using System;
 
 public class Presenter : MonoBehaviour
 {
@@ -39,7 +39,7 @@ public class Presenter : MonoBehaviour
         logView.logButton.OnClickAsObservable().Subscribe(_=>logModel.ShowLog(logView.logPanel)).AddTo(this);
 
         shopView.shopButton.OnClickAsObservable().Subscribe(_=>shopModel.ShowShop(shopView.shopPanel)).AddTo(this);
-        shopView.rewardButton.OnClickAsObservable().Subscribe(_=>adMobModel.ShowRewardeAd()).AddTo(this);
+        shopView.rewardButton.OnClickAsObservable().ThrottleFirst(TimeSpan.FromMilliseconds(1000)).Subscribe(_=>adMobModel.ShowRewardeAd()).AddTo(this);
 
         adMobModel.isOnAdLoadedRewardedAd.Subscribe(_=>shopModel.DisableRewardButton(shopView.rewardButton,adMobModel.isOnAdLoadedRewardedAd.Value)).AddTo(this);
     }

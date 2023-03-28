@@ -63,5 +63,11 @@ public class AdMobModel : MonoBehaviour
         }
     }
 
+    public void OnRewardAdClosed()
+    {
+        LoadRewardedAd();
+        Debug.Log("colse rewarded ad");
+    }
+
 
 }
