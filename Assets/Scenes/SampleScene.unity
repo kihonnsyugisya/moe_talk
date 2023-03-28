@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1024,15 +1024,39 @@ MonoBehaviour:
   adType: 2
   selectedPlacementIndex: 0
   androidAdUnitId: ca-app-pub-3940256099942544/5224354917
-  iOSAdUnitId: ca-app-pub-3957084734439209/8169215547
+  iOSAdUnitId: ca-app-pub-3940256099942544/1712485313
   persistent: 0
   autoLoadEnabled: 1
   onAdLoaded:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1728546711}
+        m_TargetAssemblyTypeName: AdMobManager, Assembly-CSharp
+        m_MethodName: OnRewardedAdLoaded
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onAdFailedToLoad:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1728546711}
+        m_TargetAssemblyTypeName: AdMobManager, Assembly-CSharp
+        m_MethodName: OnRewardAdFailedToLoad
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onAdFailedToShow:
     m_PersistentCalls:
       m_Calls: []
@@ -1041,7 +1065,19 @@ MonoBehaviour:
       m_Calls: []
   onUserEarnedReward:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1728546711}
+        m_TargetAssemblyTypeName: AdMobManager, Assembly-CSharp
+        m_MethodName: OnUserEarnedRewardAd
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onAdClosed:
     m_PersistentCalls:
       m_Calls: []
@@ -4238,6 +4274,7 @@ MonoBehaviour:
   logModel: {fileID: 830257368}
   shopView: {fileID: 1173150071}
   shopModel: {fileID: 830257366}
+  adMobManager: {fileID: 1728546711}
 --- !u!4 &1295259702
 Transform:
   m_ObjectHideFlags: 0
@@ -5296,7 +5333,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1472554806}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 314299474}
+        m_TargetAssemblyTypeName: GoogleMobileAds.Placement.RewardedAdGameObject,
+          GoogleMobileAds.Placement
+        m_MethodName: ShowIfLoaded
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1472554806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6438,7 +6488,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1728546710}
-  - component: {fileID: 1728546709}
+  - component: {fileID: 1728546711}
   m_Layer: 0
   m_Name: AdMobManager
   m_TagString: Untagged
@@ -6446,18 +6496,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1728546709
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1728546708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: deff98bee97aa4a8a9dce6eb2472b283, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1728546710
 Transform:
   m_ObjectHideFlags: 0
@@ -6474,6 +6512,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1728546711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1728546708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deff98bee97aa4a8a9dce6eb2472b283, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isOnAdLoadedRewardedAd:
+    value: 0
 --- !u!1 &1817925591
 GameObject:
   m_ObjectHideFlags: 0
