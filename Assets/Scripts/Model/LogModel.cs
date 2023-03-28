@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using TMPro;
-using Cysharp.Threading.Tasks;
 using System;
 
 public class LogModel : MonoBehaviour

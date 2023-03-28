@@ -13,6 +13,7 @@ public class Presenter : MonoBehaviour
     public LogModel logModel;
     public ShopView shopView;
     public ShopModel shopModel;
+    public AdMobModel adMobModel;
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +39,7 @@ public class Presenter : MonoBehaviour
         logView.logButton.OnClickAsObservable().Subscribe(_=>logModel.ShowLog(logView.logPanel)).AddTo(this);
 
         shopView.shopButton.OnClickAsObservable().Subscribe(_=>shopModel.ShowShop(shopView.shopPanel)).AddTo(this);
+        shopView.rewardButton.OnClickAsObservable().Subscribe(_=>adMobModel.ShowRewardeAd()).AddTo(this);
     }
 
     // Update is called once per frame
