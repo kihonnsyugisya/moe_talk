@@ -14,6 +14,7 @@ public class Presenter : MonoBehaviour
     public ShopView shopView;
     public ShopModel shopModel;
     public AdMobModel adMobModel;
+    public LifeModel lifeModel;
 
     // Start is called before the first frame update
     void Start()
@@ -41,7 +42,7 @@ public class Presenter : MonoBehaviour
         shopView.shopButton.OnClickAsObservable().Subscribe(_=>shopModel.ShowShop(shopView.shopPanel)).AddTo(this);
         shopView.rewardButton.OnClickAsObservable().ThrottleFirst(TimeSpan.FromMilliseconds(1000)).Subscribe(_=>adMobModel.ShowRewardeAd()).AddTo(this);
 
-        adMobModel.isOnAdLoadedRewardedAd.Subscribe(_=>shopModel.DisableRewardButton(shopView.rewardButton,adMobModel.isOnAdLoadedRewardedAd.Value)).AddTo(this);
+        adMobModel.isOnAdLoadedRewardedAd.Subscribe(_=>shopModel.DisableRewardButton(shopView.rewardButton,adMobModel.isOnAdLoadedRewardedAd.Value)).AddTo(this);   
     }
 
     // Update is called once per frame
