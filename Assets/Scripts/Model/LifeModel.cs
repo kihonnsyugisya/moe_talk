@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using TMPro;
 
 public class LifeModel : MonoBehaviour
 {
@@ -32,6 +33,14 @@ public class LifeModel : MonoBehaviour
 
     public void SetInitialLife()
     {
+        //1日一回の処理を入れる
         life.Value = 3;
     }
+
+    public void SetLife(TextMeshProUGUI lifePoint)
+    {
+        lifePoint.text = "×" + life;
+    }
+
+
 }

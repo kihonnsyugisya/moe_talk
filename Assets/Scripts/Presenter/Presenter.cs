@@ -25,8 +25,14 @@ public class Presenter : MonoBehaviour
             .Where(q => q != "")
             .DistinctUntilChanged()
             .Subscribe(async (q) =>{
+                if (lifeModel.life.Value <= 0)
+                {
+                    shopModel.ShowAdInducationView();
+                    return;
+                }
                 talkModel.ShowAns(await talkModel.gptInstance.ChatGPT(q), talkView.chatPanel);
                 talkModel.CleanChatWindow(talkView.chatWindow);
+                lifeModel.MinusLife(1); 
             }).AddTo(this);
         talkView.nextButton.OnClickAsObservable().Subscribe(_=> talkModel.CloseAns(talkView.chatPanel)).AddTo(this);
         talkView.chatWindow.onSelect.AddListener(_ => talkModel.OnSelectChatWindow(talkView.talkButton));
@@ -40,9 +46,16 @@ public class Presenter : MonoBehaviour
         logView.logButton.OnClickAsObservable().Subscribe(_=>logModel.ShowLog(logView.logPanel)).AddTo(this);
 
         shopView.shopButton.OnClickAsObservable().Subscribe(_=>shopModel.ShowShop(shopView.shopPanel)).AddTo(this);
-        shopView.rewardButton.OnClickAsObservable().ThrottleFirst(TimeSpan.FromMilliseconds(1000)).Subscribe(_=>adMobModel.ShowRewardeAd()).AddTo(this);
+        shopView.rewardButton.OnClickAsObservable().ThrottleFirst(TimeSpan.FromMilliseconds(1000)).Subscribe(_ => adMobModel.ShowRewardeAd()).AddTo(this);
 
-        adMobModel.isOnAdLoadedRewardedAd.Subscribe(_=>shopModel.DisableRewardButton(shopView.rewardButton,adMobModel.isOnAdLoadedRewardedAd.Value)).AddTo(this);   
+        adMobModel.isOnAdLoadedRewardedAd.Subscribe(_=>shopModel.DisableRewardButton(shopView.rewardButton,adMobModel.isOnAdLoadedRewardedAd.Value)).AddTo(this);
+
+        lifeModel.SetInitialLife();
+        lifeModel.life.Subscribe(_=>{
+            lifeModel.SetLife(shopView.yourLifePoint);
+            lifeModel.SetLife(talkView.life);
+        }).AddTo(this);
+
     }
 
     // Update is called once per frame
