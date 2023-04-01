@@ -25,14 +25,14 @@ public class Presenter : MonoBehaviour
             .Where(q => q != "")
             .DistinctUntilChanged()
             .Subscribe(async (q) =>{
-                if (lifeModel.life.Value <= 0)
+                if (lifeModel.totalLife.Value <= 0)
                 {
                     shopModel.ShowAdInducationView();
                     return;
                 }
                 talkModel.ShowAns(await talkModel.gptInstance.ChatGPT(q), talkView.chatPanel);
                 talkModel.CleanChatWindow(talkView.chatWindow);
-                lifeModel.MinusLife(1); 
+                lifeModel.MinusLife(shopView.freeLifePoint,shopView.paidLifePoint,1); 
             }).AddTo(this);
         talkView.nextButton.OnClickAsObservable().Subscribe(_=> talkModel.CloseAns(talkView.chatPanel)).AddTo(this);
         talkView.chatWindow.onSelect.AddListener(_ => talkModel.OnSelectChatWindow(talkView.talkButton));
@@ -49,12 +49,15 @@ public class Presenter : MonoBehaviour
         shopView.rewardButton.OnClickAsObservable().ThrottleFirst(TimeSpan.FromMilliseconds(1000)).Subscribe(_ => adMobModel.ShowRewardeAd()).AddTo(this);
 
         adMobModel.isOnAdLoadedRewardedAd.Subscribe(_=>shopModel.DisableRewardButton(shopView.rewardButton,adMobModel.isOnAdLoadedRewardedAd.Value)).AddTo(this);
+        adMobModel.amountValue.DistinctUntilChanged().Subscribe(_=>lifeModel.PlusFreeLife(shopView.freeLifePoint,1));
 
         lifeModel.SetInitialLife();
-        lifeModel.life.Subscribe(_=>{
+        lifeModel.totalLife.Subscribe(_=>{
             lifeModel.SetLife(shopView.yourLifePoint);
             lifeModel.SetLife(talkView.life);
         }).AddTo(this);
+        lifeModel.freeLife.Subscribe(_=>lifeModel.SetLife(shopView.freeLifePoint)).AddTo(this);
+        lifeModel.totalLife.Subscribe().AddTo(this);
 
     }
 

@@ -11,6 +11,7 @@ public class AdMobModel : MonoBehaviour
 {
     public BoolReactiveProperty isOnAdLoadedRewardedAd = new();
     private RewardedAdGameObject rewardedAd;
+    public IntReactiveProperty amountValue = new(0); 
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +46,7 @@ public class AdMobModel : MonoBehaviour
     public void OnUserEarnedRewardAd(Reward reward)
     {
         Debug.Log("type:" +reward.Type + ", =" + reward.Amount);
+        amountValue.Value += (int)reward.Amount;
         isOnAdLoadedRewardedAd.Value = false;
     }
 
@@ -68,6 +70,8 @@ public class AdMobModel : MonoBehaviour
         LoadRewardedAd();
         Debug.Log("colse rewarded ad");
     }
+
+    
 
 
 }

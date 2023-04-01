@@ -19,28 +19,48 @@ public class LifeModel : MonoBehaviour
         
     }
 
-    public IntReactiveProperty life = new();
+    public IntReactiveProperty freeLife = new();
+    public IntReactiveProperty paidLife = new();
+    public IntReactiveProperty totalLife = new();
 
-    public void PlusLife(int value)
+    public void PlusFreeLife(TextMeshProUGUI freeLifePoint, int value)
     {
-        life.Value += value;
+        freeLife.Value += value;
+        freeLifePoint.text = freeLife.Value.ToString();
     }
 
-    public void MinusLife(int value)
+    public void PlusPaidLife(TextMeshProUGUI paidLifePoint, int value)
     {
-        life.Value -= value;
+        paidLife.Value += value;
+        paidLifePoint.text = freeLife.Value.ToString();
+    }
+
+    public void MinusLife(TextMeshProUGUI freeLifePoint, TextMeshProUGUI paidLifePoint, int value)
+    {
+        if (freeLife.Value > 0)
+        {
+            freeLife.Value -= value;
+            freeLifePoint.text = freeLife.Value.ToString();
+        }
+        else if (paidLife.Value > 0)
+        {
+            paidLife.Value -= value;
+            paidLifePoint.text = paidLife.Value.ToString();
+        }
     }
 
     public void SetInitialLife()
     {
         //1日一回の処理を入れる
-        life.Value = 3;
+        freeLife.Value = 3;
     }
 
     public void SetLife(TextMeshProUGUI lifePoint)
     {
-        lifePoint.text = "×" + life;
+        totalLife.Value = freeLife.Value + paidLife.Value;
+        lifePoint.text = "×" + totalLife;
     }
 
+   
 
 }
