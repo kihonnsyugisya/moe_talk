@@ -49,7 +49,7 @@ public class Presenter : MonoBehaviour
         shopView.rewardButton.OnClickAsObservable().ThrottleFirst(TimeSpan.FromMilliseconds(1000)).Subscribe(_ => adMobModel.ShowRewardeAd()).AddTo(this);
 
         adMobModel.isOnAdLoadedRewardedAd.Subscribe(_=>shopModel.DisableRewardButton(shopView.rewardPanel,adMobModel.isOnAdLoadedRewardedAd.Value)).AddTo(this);
-        adMobModel.amountValue.DistinctUntilChanged().Subscribe(_=>lifeModel.PlusFreeLife(shopView.freeLifePoint,1));
+        adMobModel.amountValue.DistinctUntilChanged().Subscribe(amount=>lifeModel.PlusFreeLife(shopView.freeLifePoint,amount));
 
         lifeModel.SetInitialLife();
         lifeModel.totalLife.Subscribe(_=>{
