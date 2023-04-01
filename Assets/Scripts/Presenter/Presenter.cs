@@ -48,7 +48,7 @@ public class Presenter : MonoBehaviour
         shopView.shopButton.OnClickAsObservable().Subscribe(_=>shopModel.ShowShop(shopView.shopPanel)).AddTo(this);
         shopView.rewardButton.OnClickAsObservable().ThrottleFirst(TimeSpan.FromMilliseconds(1000)).Subscribe(_ => adMobModel.ShowRewardeAd()).AddTo(this);
 
-        adMobModel.isOnAdLoadedRewardedAd.Subscribe(_=>shopModel.DisableRewardButton(shopView.rewardButton,adMobModel.isOnAdLoadedRewardedAd.Value)).AddTo(this);
+        adMobModel.isOnAdLoadedRewardedAd.Subscribe(_=>shopModel.DisableRewardButton(shopView.rewardPanel,adMobModel.isOnAdLoadedRewardedAd.Value)).AddTo(this);
         adMobModel.amountValue.DistinctUntilChanged().Subscribe(_=>lifeModel.PlusFreeLife(shopView.freeLifePoint,1));
 
         lifeModel.SetInitialLife();
