@@ -46,7 +46,7 @@ public class AdMobModel : MonoBehaviour
     public void OnUserEarnedRewardAd(Reward reward)
     {
         Debug.Log("type:" +reward.Type + ", =" + reward.Amount);
-        amountValue.Value = (int)reward.Amount;
+        amountValue.SetValueAndForceNotify((int)reward.Amount);
         isOnAdLoadedRewardedAd.Value = false;
     }
 

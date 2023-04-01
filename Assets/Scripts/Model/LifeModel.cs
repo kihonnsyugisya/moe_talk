@@ -32,7 +32,9 @@ public class LifeModel : MonoBehaviour
     public void PlusPaidLife(TextMeshProUGUI paidLifePoint, int value)
     {
         paidLife.Value += value;
-        paidLifePoint.text = freeLife.Value.ToString();
+        paidLifePoint.text = paidLife.Value.ToString();
+        Debug.Log("fsdkhfsk");
+        Debug.Log(value +"kore");
     }
 
     public void MinusLife(TextMeshProUGUI freeLifePoint, TextMeshProUGUI paidLifePoint, int value)
