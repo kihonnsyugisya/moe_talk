@@ -52,13 +52,13 @@ public class Presenter : MonoBehaviour
         adMobModel.isOnAdLoadedRewardedAd.Subscribe(_=>shopModel.DisableRewardButton(shopView.rewardPanel,adMobModel.isOnAdLoadedRewardedAd.Value)).AddTo(this);
         adMobModel.amountValue.Subscribe(amount=>lifeModel.PlusFreeLife(shopView.freeLifePoint,amount));
 
-        lifeModel.SetInitialLife();
-        lifeModel.totalLife.Subscribe(_=>{
-            lifeModel.SetLife(shopView.yourLifePoint);
-            lifeModel.SetLife(talkView.life);
+        lifeModel.totalLife.Subscribe( x => {
+            lifeModel.SetViewLife(shopView.yourLifePoint,x);
+            lifeModel.SetViewLife(talkView.life,x);
         }).AddTo(this);
-        lifeModel.freeLife.Subscribe(_=>lifeModel.SetLife(shopView.freeLifePoint)).AddTo(this);
-        lifeModel.paidLife.Subscribe(_=>lifeModel.SetLife(shopView.paidLifePoint)).AddTo(this);
+        lifeModel.freeLife.Subscribe(x=>lifeModel.SetViewLife(shopView.freeLifePoint,x)).AddTo(this);
+        lifeModel.paidLife.Subscribe(x=>lifeModel.SetViewLife(shopView.paidLifePoint,x)).AddTo(this);
+        lifeModel.SetInitialLife();
 
         iapModel.amount.Subscribe(amount => lifeModel.PlusPaidLife(shopView.paidLifePoint, amount)).AddTo(this);
 
