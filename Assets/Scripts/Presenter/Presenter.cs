@@ -63,7 +63,10 @@ public class Presenter : MonoBehaviour
 
         iapModel.amount.Subscribe(amount => lifeModel.PlusPaidLife(shopView.paidLifePoint, amount)).AddTo(this);
 
-        
+        bottomNaviModel.isShop.Subscribe(value => { bottomNaviModel.ShowPanel(shopView.shopPanel,value); bottomNaviModel.SelectColorControll(shopView.shopButton,); }).AddTo(this);
+        bottomNaviModel.isTalk.Subscribe(value => { }).AddTo(this);
+        bottomNaviModel.isLog.Subscribe(value => { }).AddTo(this);
+
 
     }
 
