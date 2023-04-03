@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using UnityEngine.UI;
+using TMPro;
 
 public class BottomNaviModel : MonoBehaviour
 {
@@ -18,9 +20,9 @@ public class BottomNaviModel : MonoBehaviour
     }
 
     private BoolReactiveProperty isNone = new(true);
-    private BoolReactiveProperty isShop = new(false);
-    private BoolReactiveProperty isTalk = new(false);
-    private BoolReactiveProperty isLog = new(false);
+    public BoolReactiveProperty isShop = new(false);
+    public BoolReactiveProperty isTalk = new(false);
+    public BoolReactiveProperty isLog = new(false);
 
     public enum MODE
     {
@@ -32,27 +34,32 @@ public class BottomNaviModel : MonoBehaviour
         switch (mode)
         {
             case MODE.NONE:
-                isNone.Value = true;
+                isNone.Value = !isNone.Value;
                 isShop.Value = isTalk.Value = isLog.Value = false;
                 break;
             case MODE.TALK:
-                isTalk.Value = true;
+                isTalk.Value = !isTalk.Value;
                 isShop.Value = isLog.Value = isNone.Value = false;
                 break;
             case MODE.LOG:
-                isLog.Value = true;
+                isLog.Value = !isLog.Value;
                 isShop.Value = isTalk.Value = isNone.Value = false;
                 break;
             case MODE.SHOP:
-                isShop.Value = true;
+                isShop.Value = !isShop.Value;
                 isTalk.Value = isLog.Value = isNone.Value = false;
                 break;
         }
     }
 
-    public void ShowControll()
+    public void ShowPanel(GameObject panel, bool isInteractabl)
     {
+        panel.SetActive(isInteractabl);
+    }
 
+    public void SelectColorControll(Button button,TextMeshProUGUI text,bool isActive)
+    {
+        button.image.color = text.color = isActive ? SelectColors.themeColor : SelectColors.defaultButtonColor ;
     }
 
 

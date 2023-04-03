@@ -16,6 +16,7 @@ public class Presenter : MonoBehaviour
     public AdMobModel adMobModel;
     public LifeModel lifeModel;
     public IapModel iapModel;
+    public BottomNaviModel bottomNaviModel;
 
     // Start is called before the first frame update
     void Start()
@@ -61,6 +62,8 @@ public class Presenter : MonoBehaviour
         lifeModel.SetInitialLife();
 
         iapModel.amount.Subscribe(amount => lifeModel.PlusPaidLife(shopView.paidLifePoint, amount)).AddTo(this);
+
+        
 
     }
 
