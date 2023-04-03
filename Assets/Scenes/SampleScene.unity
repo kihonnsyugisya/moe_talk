@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2939,6 +2939,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1eafb6005c15401887c8f10ec558e90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isNone:
+    value: 1
   isShop:
     value: 0
   isTalk:
@@ -4438,6 +4440,7 @@ MonoBehaviour:
   adInducationPanel: {fileID: 0}
   talkButton: {fileID: 1826490777}
   nextButton: {fileID: 185877195}
+  bottomText: {fileID: 1817925593}
 --- !u!4 &1173150069
 Transform:
   m_ObjectHideFlags: 0
@@ -4470,6 +4473,7 @@ MonoBehaviour:
   contentsBox: {fileID: 1240484051}
   userContentsPanel: {fileID: 973282670}
   aiContentsPanel: {fileID: 2086694838}
+  bottomText: {fileID: 2005190999}
 --- !u!114 &1173150071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4490,6 +4494,7 @@ MonoBehaviour:
   paidLifePoint: {fileID: 507214713}
   shopPanel: {fileID: 1351069071}
   rewardPanel: {fileID: 1900037675}
+  bottomText: {fileID: 1608790341}
 --- !u!1 &1205093903
 GameObject:
   m_ObjectHideFlags: 0

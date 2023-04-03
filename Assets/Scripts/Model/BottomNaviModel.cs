@@ -19,10 +19,10 @@ public class BottomNaviModel : MonoBehaviour
         
     }
 
-    private BoolReactiveProperty isNone = new(true);
-    public BoolReactiveProperty isShop = new(false);
-    public BoolReactiveProperty isTalk = new(false);
-    public BoolReactiveProperty isLog = new(false);
+    [HideInInspector] public BoolReactiveProperty isNone = new(true);
+    [HideInInspector] public BoolReactiveProperty isShop = new(false);
+    [HideInInspector] public BoolReactiveProperty isTalk = new(false);
+    [HideInInspector] public BoolReactiveProperty isLog = new(false);
 
     public enum MODE
     {

@@ -18,12 +18,6 @@ public class LogModel : MonoBehaviour
     {
     }
 
-    public void ShowLog(GameObject logPanel)
-    {
-        isShowLog.Value = !isShowLog.Value;
-        logPanel.SetActive(isShowLog.Value);
-    }
-
 
     public void GenaleteLogContents(string role,string content,LogView logView)
     {

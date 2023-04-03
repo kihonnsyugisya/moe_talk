@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,5 +22,5 @@ public class LogView : MonoBehaviour
     public Transform contentsBox;
     public GameObject userContentsPanel;
     public GameObject aiContentsPanel;
+    public TextMeshProUGUI bottomText;
 }
-    
