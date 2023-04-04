@@ -26,4 +26,5 @@ public class ShopView : MonoBehaviour
     public TextMeshProUGUI paidLifePoint;
     public GameObject shopPanel;
     public GameObject rewardPanel;
+    public TextMeshProUGUI bottomText;
 }

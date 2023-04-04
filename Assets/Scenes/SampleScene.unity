@@ -618,6 +618,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: unitychan
       objectReference: {fileID: 0}
+    - target: {fileID: 100326, guid: 8f0565f23a2b58541a475bd3c1393052, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 400326, guid: 8f0565f23a2b58541a475bd3c1393052, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -2826,6 +2830,7 @@ GameObject:
   - component: {fileID: 830257368}
   - component: {fileID: 830257369}
   - component: {fileID: 830257370}
+  - component: {fileID: 830257371}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -2921,6 +2926,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amount:
+    value: 0
+--- !u!114 &830257371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830257364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1eafb6005c15401887c8f10ec558e90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isNone:
+    value: 1
+  isShop:
+    value: 0
+  isTalk:
+    value: 0
+  isLog:
     value: 0
 --- !u!1 &850935954
 GameObject:
@@ -4415,6 +4440,7 @@ MonoBehaviour:
   adInducationPanel: {fileID: 0}
   talkButton: {fileID: 1826490777}
   nextButton: {fileID: 185877195}
+  bottomText: {fileID: 1817925593}
 --- !u!4 &1173150069
 Transform:
   m_ObjectHideFlags: 0
@@ -4447,6 +4473,7 @@ MonoBehaviour:
   contentsBox: {fileID: 1240484051}
   userContentsPanel: {fileID: 973282670}
   aiContentsPanel: {fileID: 2086694838}
+  bottomText: {fileID: 2005190999}
 --- !u!114 &1173150071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4467,6 +4494,7 @@ MonoBehaviour:
   paidLifePoint: {fileID: 507214713}
   shopPanel: {fileID: 1351069071}
   rewardPanel: {fileID: 1900037675}
+  bottomText: {fileID: 1608790341}
 --- !u!1 &1205093903
 GameObject:
   m_ObjectHideFlags: 0
@@ -5168,6 +5196,7 @@ MonoBehaviour:
   adMobModel: {fileID: 1728546711}
   lifeModel: {fileID: 830257369}
   iapModel: {fileID: 830257370}
+  bottomNaviModel: {fileID: 830257371}
 --- !u!4 &1295259702
 Transform:
   m_ObjectHideFlags: 0

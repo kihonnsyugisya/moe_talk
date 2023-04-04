@@ -34,12 +34,6 @@ public class ShopModel : MonoBehaviour
         );
     }
 
-    public void ShowShop(GameObject shopPanel)
-    {
-        isShowShop.Value = !isShowShop.Value;
-        shopPanel.SetActive(isShowShop.Value);
-    }
-
     public void DisableRewardButton(GameObject rewardPanel,bool isInteractabl)
     {
         rewardPanel.SetActive(isInteractabl);

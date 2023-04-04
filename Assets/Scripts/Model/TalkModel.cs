@@ -48,16 +48,6 @@ public class TalkModel : MonoBehaviour
 
     }
 
-    public void OnDeselectChatWindow(Button talkButton)
-    {
-        talkButton.image.color = SelectColors.defaultButtonColor;
-    }
-
-    public void OnSelectChatWindow(Button talkButton)
-    {
-        talkButton.image.color =  SelectColors.themeColor; 
-    }
-
     public void CleanChatWindow(TMP_InputField chatWindow)
     {
         chatWindow.text = "";

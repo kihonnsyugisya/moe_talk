@@ -25,4 +25,5 @@ public class TalkView : MonoBehaviour
     public GameObject adInducationPanel;
     public Button talkButton;
     public Button nextButton;
+    public TextMeshProUGUI bottomText;
 }
