@@ -26,7 +26,7 @@ public class LogModel : MonoBehaviour
             ? Instantiate(logView.aiContentsPanel, logView.contentsBox)
             : Instantiate(logView.userContentsPanel, logView.contentsBox);
 
-        TextMeshProUGUI contentsText = contentsInstance.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI contentsText = contentsInstance.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
         contentsText.text = content;
         //float contentBoxHeight = contentsText.rectTransform.sizeDelta.y;
         //contentsText.ForceMeshUpdate();
