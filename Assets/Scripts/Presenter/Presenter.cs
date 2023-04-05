@@ -63,9 +63,9 @@ public class Presenter : MonoBehaviour
         iapModel.amount.Subscribe(amount => lifeModel.PlusPaidLife(shopView.paidLifePoint, amount)).AddTo(this);
 
         bottomNaviModel.isNone.Subscribe(_=>bottomNaviModel.SelectColorControll(shopView.shopButton, shopView.bottomText, false)).AddTo(this);
-        bottomNaviModel.isShop.Subscribe(value => { bottomNaviModel.ShowPanel(shopView.shopPanel,value); bottomNaviModel.SelectColorControll(shopView.shopButton,shopView.bottomText,value); }).AddTo(this);
-        bottomNaviModel.isTalk.Subscribe(value => { bottomNaviModel.SelectColorControll(talkView.talkButton,talkView.bottomText,value); }).AddTo(this);
-        bottomNaviModel.isLog.Subscribe(value => { bottomNaviModel.ShowPanel(logView.logPanel, value); bottomNaviModel.SelectColorControll(logView.logButton,logView.bottomText,value); }).AddTo(this);
+        bottomNaviModel.isShop.Subscribe(value => { bottomNaviModel.ShowPanel(shopView.shopPanel,value); bottomNaviModel.SelectColorControll(shopView.shopButton,shopView.bottomText,value); talkModel.CloseAns(talkView.chatPanel); }).AddTo(this);
+        bottomNaviModel.isTalk.Subscribe(value => { bottomNaviModel.SelectColorControll(talkView.talkButton,talkView.bottomText,value); talkModel.CloseAns(talkView.chatPanel); }).AddTo(this);
+        bottomNaviModel.isLog.Subscribe(value => { bottomNaviModel.ShowPanel(logView.logPanel, value); bottomNaviModel.SelectColorControll(logView.logButton,logView.bottomText,value); talkModel.CloseAns(talkView.chatPanel); }).AddTo(this);
 
 
     }
