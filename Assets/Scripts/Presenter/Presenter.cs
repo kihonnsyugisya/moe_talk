@@ -10,6 +10,7 @@ public class Presenter : MonoBehaviour
     public TalkView talkView;
     public TalkModel talkModel;
     public LogView logView;
+    public AvatarView avatarView;
     public LogModel logModel;
     public ShopView shopView;
     public ShopModel shopModel;
@@ -17,6 +18,7 @@ public class Presenter : MonoBehaviour
     public LifeModel lifeModel;
     public IapModel iapModel;
     public BottomNaviModel bottomNaviModel;
+    public AvatarModel avatarModel;
 
     // Start is called before the first frame update
     void Start()
