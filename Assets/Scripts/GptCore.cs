@@ -14,16 +14,17 @@ public class GptCore
 
     const string API_URL = "https://api.openai.com/v1/chat/completions";
     private string API_KEY = env.CHAT_GPT_API_KEY;
-    const float TEMPERATURE = 0.5f;
+    const float TEMPERATURE = 0f;
     const int MAX_TOKENS = 1000;
     const string MODEL = "gpt-3.5-turbo";
 
-    public Dictionary<EMOTIONS, int> emotionData = new Dictionary<EMOTIONS, int>()
+    public static ReactiveDictionary<EMOTIONS, int> emotionData = new()
     {
         {EMOTIONS.HAPPY,0},
         {EMOTIONS.LOVE,0},
         {EMOTIONS.SAD,0},
         {EMOTIONS.FEAR,0},
+        {EMOTIONS.ANGRY,0},
     };
 
 
@@ -40,28 +41,35 @@ public class GptCore
         public string[] messages;
     }
 
-    public Dictionary<string, object> requestParam = new Dictionary<string, object>();
+    public Dictionary<string, object> requestParam = new()
+    {
+        {"model",MODEL},
+        {"temperature",TEMPERATURE},
+        {"max_tokens",MAX_TOKENS},
+
+    };
 
     readonly Message initialMessage = new()
     {
         role = "system",
         content = @"According to the following conditions, role-play as a chatbot with pseudo-emotions.
-                 In subsequent conversations, we assume that you behave as if you possess the following four emotional parameters:
+                 In subsequent conversations, we assume that you behave as if you possess the following five emotional parameters:
                  HAPPY, LOVE, SAD, ANGRY, FEAR
                  Each emotional parameter shall fluctuate throughout the conversation.
                  The tone or utterance of your response will change to reflect the current value of your emotional parameter.
                  In subsequent conversations, first output the current emotion parameters, and then output the conversation in Japanese.
                  The output format is the following json format. Please do not communicate outside of this format.
-            
-                 {
+
+                
                      emotion: {
-                         HAPPY: 0~5,
-                         LOVE: 0~5,
-                         SAD: 0~5,
-                         FEAR: 0~5,
+                         HAPPY: 0~10,
+                         LOVE: 0~10,
+                         SAD: 0~10,
+                         ANGRY: 0~10,
+                         FEAR: 0~10,
                      }
                      message: ""conversation text""
-                 }"
+                 "
     };
 
     public static readonly ReactiveCollection<Message> messageBox = new ReactiveCollection<Message>();
@@ -83,10 +91,6 @@ public class GptCore
             content = content
         };
         messageBox.Add(userMessage);
-
-        if(!requestParam.ContainsKey("model")) requestParam.Add("model", MODEL);
-        if (!requestParam.ContainsKey("temperature")) requestParam.Add("temperature", TEMPERATURE);
-        if (!requestParam.ContainsKey("max_tokens")) requestParam.Add("max_tokens", MAX_TOKENS);
 
         if (!requestParam.ContainsKey("messages")) requestParam.Add("messages", messageBox);
         else requestParam["messages"] = messageBox;
@@ -138,7 +142,12 @@ public class GptCore
         {
             avatarReactionDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(result);
             result = avatarReactionDictionary["message"].ToString();
-            emotionData = JsonConvert.DeserializeObject<Dictionary<EMOTIONS, int>>(avatarReactionDictionary["emotion"].ToString());
+            Dictionary<EMOTIONS, int> catchData = JsonConvert.DeserializeObject<Dictionary<EMOTIONS, int>>(avatarReactionDictionary["emotion"].ToString());
+            foreach (var pair in catchData)
+            {
+                if (emotionData.TryAdd(pair.Key, pair.Value)) { Debug.Log(pair.Key + " を新規追加"); }
+                else { emotionData[pair.Key] = pair.Value;  }
+            }
         }
         catch (JsonReaderException e)
         {
@@ -146,8 +155,6 @@ public class GptCore
             //InitialGPT();
             Debug.Log(e);
         }
-
-        Debug.Log(emotionData[EMOTIONS.HAPPY]);
 
 
         Message assistantMessage = new()
@@ -180,19 +187,20 @@ public enum EMOTIONS
 //プロンプトの日本語文（これを翻訳してsystemにぶち込む）
 
 //@"以下の条件に従って、疑似的な感情をもつチャットボットとしてロールプレイをします。
-//                以後の会話では、あなたは下記の4つの感情パラメーターを持つかのように、振る舞うものとします。
+//                以後の会話では、あなたは下記の5つの感情パラメーターを持つかのように、振る舞うものとします。
 //                HAPPY,LOVE,SAD,ANGRY,FEAR
 //                各感情パラメーターは会話を通じて変動するものとします。
 //                現在の感情パラメーターの値を反映するように、あなたの返答のトーンや発言は変化します。
 //                以後の会話ではまず現在の感情パラメータを出力し、その後に会話を日本語で出力してください。
 //                出力形式は以下のjsonフォーマットとします。このフォーマット以外で会話しないでください。
-            
-//                
+
+                
 //                    emotion: {
-//                        HAPPY: 0~5,
-//                        LOVE: 0~5,
-//                        SAD: 0~5,
-//                        FEAR: 0~5,
+//                        HAPPY: 0~10,
+//                        LOVE: 0~10,
+//                        SAD: 0~10,
+//                        ANGRY: 0~10,
+//                        FEAR: 0~10,
 //                    }
 //                    message: ""会話の文章""
 //                "
