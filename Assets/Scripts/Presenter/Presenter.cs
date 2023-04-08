@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using Cysharp.Threading.Tasks;
 using System;
+using UniRx.Triggers;
 
 public class Presenter : MonoBehaviour
 {
@@ -50,10 +51,9 @@ public class Presenter : MonoBehaviour
 
         GptCore.emotionData
             .ObserveReplace()
-            .DistinctUntilChanged()
             .Subscribe(pair => {
-                //Debug.Log(pair.Key.ToString() + pair.NewValue /10f);
-                //Debug.Log(avatarView.TranslateEmoToState(pair.Key));
+                Debug.Log(pair.Key.ToString() + pair.NewValue / 10f);
+                Debug.Log(avatarView.TranslateEmoToState(pair.Key));
                 avatarView.animator.SetLayerWeight(1,pair.NewValue /10f);
                 avatarView.animator.Play(avatarView.TranslateEmoToState(pair.Key));
                 //avatarView.animator.Play("SURPRISE");
@@ -61,27 +61,33 @@ public class Presenter : MonoBehaviour
             })
             .AddTo(this);
 
-        shopView.shopButton.OnClickAsObservable().Subscribe(_=>bottomNaviModel.ChangeMode(BottomNaviModel.MODE.SHOP)).AddTo(this);
+        shopView.shopButton.OnClickAsObservable().Subscribe(_ => bottomNaviModel.ChangeMode(BottomNaviModel.MODE.SHOP)).AddTo(this);
         shopView.rewardButton.OnClickAsObservable().ThrottleFirst(TimeSpan.FromMilliseconds(1000)).Subscribe(_ => adMobModel.ShowRewardeAd()).AddTo(this);
-        adMobModel.isOnAdLoadedRewardedAd.Subscribe(_=>shopModel.DisableRewardButton(shopView.rewardPanel,adMobModel.isOnAdLoadedRewardedAd.Value)).AddTo(this);
-        adMobModel.amountValue.Subscribe(amount=>lifeModel.PlusFreeLife(shopView.freeLifePoint,amount));
+        adMobModel.isOnAdLoadedRewardedAd.Subscribe(_ => shopModel.DisableRewardButton(shopView.rewardPanel, adMobModel.isOnAdLoadedRewardedAd.Value)).AddTo(this);
+        adMobModel.amountValue.Subscribe(amount => lifeModel.PlusFreeLife(shopView.freeLifePoint, amount));
 
-        lifeModel.totalLife.Subscribe( x => {
-            lifeModel.SetViewLife(shopView.yourLifePoint,x);
-            lifeModel.SetViewLife(talkView.life,x);
+        lifeModel.totalLife.Subscribe(x =>
+        {
+            lifeModel.SetViewLife(shopView.yourLifePoint, x);
+            lifeModel.SetViewLife(talkView.life, x);
         }).AddTo(this);
-        lifeModel.freeLife.Subscribe(x=>lifeModel.SetViewLife(shopView.freeLifePoint,x)).AddTo(this);
-        lifeModel.paidLife.Subscribe(x=>lifeModel.SetViewLife(shopView.paidLifePoint,x)).AddTo(this);
+        lifeModel.freeLife.Subscribe(x => lifeModel.SetViewLife(shopView.freeLifePoint, x)).AddTo(this);
+        lifeModel.paidLife.Subscribe(x => lifeModel.SetViewLife(shopView.paidLifePoint, x)).AddTo(this);
         lifeModel.SetInitialLife();
 
         iapModel.amount.Subscribe(amount => lifeModel.PlusPaidLife(shopView.paidLifePoint, amount)).AddTo(this);
 
-        bottomNaviModel.isNone.Subscribe(_=>bottomNaviModel.SelectColorControll(shopView.shopButton, shopView.bottomText, false)).AddTo(this);
-        bottomNaviModel.isShop.Subscribe(value => { bottomNaviModel.ShowPanel(shopView.shopPanel,value); bottomNaviModel.SelectColorControll(shopView.shopButton,shopView.bottomText,value); talkModel.CloseAns(talkView.chatPanel); }).AddTo(this);
-        bottomNaviModel.isTalk.Subscribe(value => { bottomNaviModel.SelectColorControll(talkView.talkButton,talkView.bottomText,value); talkModel.CloseAns(talkView.chatPanel); }).AddTo(this);
-        bottomNaviModel.isLog.Subscribe(value => { bottomNaviModel.ShowPanel(logView.logPanel, value); bottomNaviModel.SelectColorControll(logView.logButton,logView.bottomText,value); talkModel.CloseAns(talkView.chatPanel); }).AddTo(this);
+        bottomNaviModel.isNone.Subscribe(_ => bottomNaviModel.SelectColorControll(shopView.shopButton, shopView.bottomText, false)).AddTo(this);
+        bottomNaviModel.isShop.Subscribe(value => { bottomNaviModel.ShowPanel(shopView.shopPanel, value); bottomNaviModel.SelectColorControll(shopView.shopButton, shopView.bottomText, value); talkModel.CloseAns(talkView.chatPanel); }).AddTo(this);
+        bottomNaviModel.isTalk.Subscribe(value => { bottomNaviModel.SelectColorControll(talkView.talkButton, talkView.bottomText, value); talkModel.CloseAns(talkView.chatPanel); }).AddTo(this);
+        bottomNaviModel.isLog.Subscribe(value => { bottomNaviModel.ShowPanel(logView.logPanel, value); bottomNaviModel.SelectColorControll(logView.logButton, logView.bottomText, value); talkModel.CloseAns(talkView.chatPanel); }).AddTo(this);
 
-
+        this.UpdateAsObservable()
+            .Where(_ => Input.GetKey(KeyCode.Space))
+            .Subscribe(_ =>
+            {
+                GptCore.CallMessages();
+            });
     }
 
     // Update is called once per frame

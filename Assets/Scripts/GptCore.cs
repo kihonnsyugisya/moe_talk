@@ -143,16 +143,20 @@ public class GptCore
             avatarReactionDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(result);
             result = avatarReactionDictionary["message"].ToString();
             Dictionary<EMOTIONS, int> catchData = JsonConvert.DeserializeObject<Dictionary<EMOTIONS, int>>(avatarReactionDictionary["emotion"].ToString());
+            int maxEmo = 0;
+            EMOTIONS currentEmo = EMOTIONS.HAPPY;
             foreach (var pair in catchData)
             {
-                if (emotionData.TryAdd(pair.Key, pair.Value)) { Debug.Log(pair.Key + " を新規追加"); }
-                else { emotionData[pair.Key] = pair.Value;  }
+                if (maxEmo < pair.Value) { maxEmo = pair.Value; currentEmo = pair.Key; }
             }
+            if (emotionData.TryAdd(currentEmo,maxEmo)) { Debug.Log(currentEmo.ToString() + " を新規追加"); }
+            else { emotionData[currentEmo] = maxEmo; }
         }
         catch (JsonReaderException e)
         {
-            //Debug.Log("前提条件を再セット");
-            //InitialGPT();
+            Debug.Log("前提条件を再セット");
+            InitialGPT();
+            emotionData[EMOTIONS.HAPPY] = 0;
             Debug.Log(e);
         }
 
@@ -175,6 +179,14 @@ public class GptCore
         
         return "translate";
 
+    }
+
+    public static void CallMessages()
+    {
+        foreach (var pair in messageBox)
+        {
+            Debug.Log(pair.role.ToString() + pair.content);
+        }
     }
 
 }
