@@ -48,9 +48,21 @@ public class Presenter : MonoBehaviour
             .AddTo(this);
         logView.logButton.OnClickAsObservable().Subscribe(_=>bottomNaviModel.ChangeMode(BottomNaviModel.MODE.LOG)).AddTo(this);
 
+        GptCore.emotionData
+            .ObserveReplace()
+            .DistinctUntilChanged()
+            .Subscribe(pair => {
+                //Debug.Log(pair.Key.ToString() + pair.NewValue /10f);
+                //Debug.Log(avatarView.TranslateEmoToState(pair.Key));
+                avatarView.animator.SetLayerWeight(1,pair.NewValue /10f);
+                avatarView.animator.Play(avatarView.TranslateEmoToState(pair.Key));
+                //avatarView.animator.Play("SURPRISE");
+
+            })
+            .AddTo(this);
+
         shopView.shopButton.OnClickAsObservable().Subscribe(_=>bottomNaviModel.ChangeMode(BottomNaviModel.MODE.SHOP)).AddTo(this);
         shopView.rewardButton.OnClickAsObservable().ThrottleFirst(TimeSpan.FromMilliseconds(1000)).Subscribe(_ => adMobModel.ShowRewardeAd()).AddTo(this);
-
         adMobModel.isOnAdLoadedRewardedAd.Subscribe(_=>shopModel.DisableRewardButton(shopView.rewardPanel,adMobModel.isOnAdLoadedRewardedAd.Value)).AddTo(this);
         adMobModel.amountValue.Subscribe(amount=>lifeModel.PlusFreeLife(shopView.freeLifePoint,amount));
 

@@ -4,19 +4,34 @@ using UnityEngine;
 
 public class AvatarView : MonoBehaviour
 {
+    [SerializeField,Range(0,1f)] private float weight;
     // Start is called before the first frame update
     void Start()
     {
-        animator.SetLayerWeight(1,1f);
+        //animator.Play("MTH_E");
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        animator.Play(animations[1].name);
+        //animator.SetLayerWeight(1, weight);
+
     }
 
     public Animator animator;
     public AnimationClip[] animations;
+
+    public string TranslateEmoToState(EMOTIONS emo)
+    {
+        return emo switch
+        {
+            EMOTIONS.HAPPY or EMOTIONS.LOVE => animations[1].name,
+            EMOTIONS.SAD => animations[2].name,
+            EMOTIONS.FEAR => animations[6].name,
+            EMOTIONS.ANGRY => animations[3].name,
+            _ => animations[0].name,
+        };
+    }
+
 }
