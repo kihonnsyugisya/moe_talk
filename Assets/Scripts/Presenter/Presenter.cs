@@ -56,6 +56,7 @@ public class Presenter : MonoBehaviour
                 Debug.Log(avatarView.TranslateEmoToState(pair.Key));
                 avatarView.animator.SetLayerWeight(1, pair.NewValue / 10f);
                 avatarView.animator.Play(avatarView.TranslateEmoToState(pair.Key));
+                avatarView.animator.SetLayerWeight(0, 1f);
                 //avatarView.animator.Play("SURPRISE");
 
             })
@@ -63,9 +64,15 @@ public class Presenter : MonoBehaviour
 
         GptCore.requestStatus.Subscribe(status => 
         {
-            talkView.chatWindow.readOnly = status == WebRequestStatus.WAITING.ToString()
-                ? true
-                : false;
+            if (status == WebRequestStatus.WAITING.ToString())
+            {
+                talkView.chatWindow.readOnly = true;
+                avatarView.animator.Play("THINKING", 0);
+            }
+            else {
+                talkView.chatWindow.readOnly = false;
+                avatarView.animator.Play("Idle", 0);
+            }
         }).AddTo(this);
 
         shopView.shopButton.OnClickAsObservable().Subscribe(_ => bottomNaviModel.ChangeMode(BottomNaviModel.MODE.SHOP)).AddTo(this);
@@ -90,7 +97,7 @@ public class Presenter : MonoBehaviour
         bottomNaviModel.isLog.Subscribe(value => { bottomNaviModel.ShowPanel(logView.logPanel, value); bottomNaviModel.SelectColorControll(logView.logButton, logView.bottomText, value); talkModel.CloseAns(talkView.chatPanel); }).AddTo(this);
 
         this.UpdateAsObservable()
-            .Where(_ => Input.GetKey(KeyCode.Space))
+            .Where(_ => Input.GetKey(KeyCode.Escape))
             .Subscribe(_ =>
             {
                 GptCore.CallMessages();
@@ -98,7 +105,7 @@ public class Presenter : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void Update()   
     {
         Debug.Log(GptCore.requestStatus.ToString());
     }   
