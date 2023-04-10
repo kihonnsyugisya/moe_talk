@@ -56,7 +56,9 @@ namespace UnityChan
 			if (anim.GetBool ("Next")) {
 				// 現在のステートをチェックし、ステート名が違っていたらブーリアンをfalseに戻す
 				currentState = anim.GetCurrentAnimatorStateInfo (0);
-				if (previousState.nameHash != currentState.nameHash) {
+				//if (previousState.nameHash != currentState.nameHash) {
+				if (previousState.fullPathHash != currentState.fullPathHash)
+				{
 					anim.SetBool ("Next", false);
 					previousState = currentState;				
 				}
@@ -66,7 +68,9 @@ namespace UnityChan
 			if (anim.GetBool ("Back")) {
 				// 現在のステートをチェックし、ステート名が違っていたらブーリアンをfalseに戻す
 				currentState = anim.GetCurrentAnimatorStateInfo (0);
-				if (previousState.nameHash != currentState.nameHash) {
+				//if (previousState.nameHash != currentState.nameHash) {
+				if (previousState.fullPathHash != currentState.fullPathHash) {
+
 					anim.SetBool ("Back", false);
 					previousState = currentState;
 				}
