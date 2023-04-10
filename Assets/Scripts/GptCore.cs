@@ -17,6 +17,7 @@ public class GptCore
     const float TEMPERATURE = 0f;
     const int MAX_TOKENS = 1000;
     const string MODEL = "gpt-3.5-turbo";
+    public static StringReactiveProperty requestStatus = new(WebRequestStatus.DEFAULT.ToString());
 
     public static ReactiveDictionary<EMOTIONS, int> emotionData = new()
     {
@@ -104,7 +105,9 @@ public class GptCore
         request.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
 
+        requestStatus.Value = WebRequestStatus.WAITING.ToString();
         await request.SendWebRequest();
+        requestStatus.Value = WebRequestStatus.SUCCESS.ToString();
 
 
         // HTTPレスポンスの受信と解析
@@ -194,6 +197,11 @@ public class GptCore
 public enum EMOTIONS
 {
     HAPPY,LOVE,SAD,ANGRY,FEAR
+}
+
+public enum WebRequestStatus 
+{
+    SUCCESS,WAITING,DEFAULT
 }
 
 //プロンプトの日本語文（これを翻訳してsystemにぶち込む）

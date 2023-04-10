@@ -29,7 +29,7 @@ public class Presenter : MonoBehaviour
             .AsObservable()
             .Where(q => q != "")
             .DistinctUntilChanged()
-            .Subscribe(async (q) =>{
+            .Subscribe(async (q) => {
                 if (lifeModel.totalLife.Value <= 0)
                 {
                     shopModel.ShowAdInducationView();
@@ -37,29 +37,36 @@ public class Presenter : MonoBehaviour
                 }
                 talkModel.ShowAns(await talkModel.gptInstance.ChatGPT(q), talkView.chatPanel);
                 talkModel.CleanChatWindow(talkView.chatWindow);
-                lifeModel.MinusLife(shopView.freeLifePoint,shopView.paidLifePoint,1); 
+                lifeModel.MinusLife(shopView.freeLifePoint, shopView.paidLifePoint, 1);
             }).AddTo(this);
-        talkView.nextButton.OnClickAsObservable().Subscribe(_=> talkModel.CloseAns(talkView.chatPanel)).AddTo(this);
-        talkView.chatWindow.onDeselect.AddListener(_=> bottomNaviModel.ChangeMode(BottomNaviModel.MODE.NONE));
+        talkView.nextButton.OnClickAsObservable().Subscribe(_ => talkModel.CloseAns(talkView.chatPanel)).AddTo(this);
+        talkView.chatWindow.onDeselect.AddListener(_ => bottomNaviModel.ChangeMode(BottomNaviModel.MODE.NONE));
 
         GptCore.messageBox
             .ObserveAdd()
             .Where(message => message.Value.role != "system")
-            .Subscribe(message => logModel.GenaleteLogContents(message.Value.role,message.Value.content,logView))
+            .Subscribe(message => logModel.GenaleteLogContents(message.Value.role, message.Value.content, logView))
             .AddTo(this);
-        logView.logButton.OnClickAsObservable().Subscribe(_=>bottomNaviModel.ChangeMode(BottomNaviModel.MODE.LOG)).AddTo(this);
+        logView.logButton.OnClickAsObservable().Subscribe(_ => bottomNaviModel.ChangeMode(BottomNaviModel.MODE.LOG)).AddTo(this);
 
         GptCore.emotionData
             .ObserveReplace()
             .Subscribe(pair => {
                 Debug.Log(pair.Key.ToString() + pair.NewValue / 10f);
                 Debug.Log(avatarView.TranslateEmoToState(pair.Key));
-                avatarView.animator.SetLayerWeight(1,pair.NewValue /10f);
+                avatarView.animator.SetLayerWeight(1, pair.NewValue / 10f);
                 avatarView.animator.Play(avatarView.TranslateEmoToState(pair.Key));
                 //avatarView.animator.Play("SURPRISE");
 
             })
             .AddTo(this);
+
+        GptCore.requestStatus.Subscribe(status => 
+        {
+            talkView.chatWindow.readOnly = status == WebRequestStatus.WAITING.ToString()
+                ? true
+                : false;
+        }).AddTo(this);
 
         shopView.shopButton.OnClickAsObservable().Subscribe(_ => bottomNaviModel.ChangeMode(BottomNaviModel.MODE.SHOP)).AddTo(this);
         shopView.rewardButton.OnClickAsObservable().ThrottleFirst(TimeSpan.FromMilliseconds(1000)).Subscribe(_ => adMobModel.ShowRewardeAd()).AddTo(this);
@@ -93,7 +100,7 @@ public class Presenter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log(GptCore.requestStatus.ToString());
     }   
 
 }
