@@ -60,16 +60,16 @@ public class Presenter : MonoBehaviour
             })
             .AddTo(this);
 
-        GptCore.requestStatus.Subscribe(status => 
+        GptCore.requestStatus.DistinctUntilChanged().Subscribe(status => 
         {
             if (status == WebRequestStatus.WAITING.ToString())
             {
                 talkView.chatWindow.readOnly = true;
-                avatarView.animator.Play("THINKING", 0);
+                avatarView.animator.SetBool("THINKING",true);
             }
             else {
                 talkView.chatWindow.readOnly = false;
-                avatarView.animator.Play("Idle", 0);
+                avatarView.animator.SetBool("THINKING", false);
             }
         }).AddTo(this);
 

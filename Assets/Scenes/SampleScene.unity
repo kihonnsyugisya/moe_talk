@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -640,7 +640,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100326, guid: 8f0565f23a2b58541a475bd3c1393052, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400326, guid: 8f0565f23a2b58541a475bd3c1393052, type: 3}
       propertyPath: m_RootOrder
@@ -3074,8 +3074,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "emotion: {\n    \"HAPPY\": 2,\n    \"LOVE\": 0,\n    \"SAD\": 5,\n   
-    \"ANGRY\": 0,\n    \"FEAR\": 0\n}\nmessage: \"\u3054\u3081\u3093\u306A\u3055\u3044\u3001\u3088\u304F\u308F\u304B\u308A\u307E\u305B\u3093\u3002\u3082\u3046\u4E00\u5EA6\u304A\u9858\u3044\u3057\u307E\u3059\u3002\""
+  m_text: "\u3069\u3046\u3057\u3066\u5ACC\u3044\u306A\u306E\uFF1F\u79C1\u306B\u4F55\u304B\u60AA\u3044\u3053\u3068\u3092\u3057\u307E\u3057\u305F\u304B\uFF1F"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8aa0acb40482a4d4eacf7f86c63ee1a0, type: 2}
   m_sharedMaterial: {fileID: -7834675572165924540, guid: 8aa0acb40482a4d4eacf7f86c63ee1a0, type: 2}
