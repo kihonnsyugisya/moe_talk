@@ -16,13 +16,12 @@ public class AvatarView : MonoBehaviour
     void Update()
     {
         //animator.SetLayerWeight(1, weight);
-
     }
 
     public Animator animator;
     public AnimationClip[] animations;
 
-    public string TranslateEmoToState(EMOTIONS emo)
+    public string TranslateEmoToFaceState(EMOTIONS emo)
     {
         return emo switch
         {
