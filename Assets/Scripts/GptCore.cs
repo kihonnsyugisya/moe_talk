@@ -159,8 +159,7 @@ public class GptCore
         {
             Debug.Log("前提条件を再セット");
             InitialGPT();
-            emotionData[EMOTIONS.HAPPY] = 0;
-            Debug.Log("ここでhappyにしてるから変な動きする");
+            emotionData.Clear();
             Debug.Log(e);
         }
 
