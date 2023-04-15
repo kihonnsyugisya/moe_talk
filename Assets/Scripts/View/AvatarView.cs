@@ -36,8 +36,6 @@ public class AvatarView : MonoBehaviour
     public void ResetFace()
     {
         animator.SetLayerWeight(1, 0f);
-        animator.Play(animations[0].name, 1);
-        Debug.Log("reset face");
     }
 
 }
