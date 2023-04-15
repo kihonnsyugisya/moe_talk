@@ -29,10 +29,20 @@ public class TalkModel : MonoBehaviour
         //Debug.Log("show ans");
     }
 
+    public void NextAns(GameObject ChatPanel)
+    {
+        TextMeshProUGUI text = ChatPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        text.pageToDisplay++;
+        Debug.Log(text.textInfo.pageCount + "pagecount");
+        Debug.Log(text.pageToDisplay + "textpagetodisplay");
+        if (text.textInfo.pageCount == text.pageToDisplay) CloseAns(ChatPanel);
+
+    }
+
     public void CloseAns(GameObject ChatPanel)
     {
         ChatPanel.SetActive(false);
-        //Debug.Log("close ans");
+        Debug.Log("close ans");
     }
 
     public void ShowChatWindow(TMP_InputField chatWindow)
