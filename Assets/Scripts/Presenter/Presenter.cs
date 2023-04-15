@@ -39,7 +39,7 @@ public class Presenter : MonoBehaviour
                 talkModel.CleanChatWindow(talkView.chatWindow);
                 lifeModel.MinusLife(shopView.freeLifePoint, shopView.paidLifePoint, 1);
             }).AddTo(this);
-        talkView.nextButton.OnClickAsObservable().Subscribe(_ => talkModel.CloseAns(talkView.chatPanel)).AddTo(this);
+        talkView.nextButton.OnClickAsObservable().Subscribe(_ => talkModel.NextAns(talkView.chatPanel)).AddTo(this);
         talkView.chatWindow.onDeselect.AddListener(_ => bottomNaviModel.ChangeMode(BottomNaviModel.MODE.NONE));
 
         GptCore.messageBox
