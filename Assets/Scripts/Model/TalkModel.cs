@@ -1,20 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using UnityEngine.UI;
 using TMPro;
-using System;
+
 
 public class TalkModel : MonoBehaviour
 {
     // Start is called before the first frame update
-    async void Start()
+    void Start()
     {
         gptInstance = new GptCore();
-        
-        //var enter = await gptInstance.ChatGPT("応答してください");
-        //Debug.Log(enter);
     }
 
     // Update is called once per frame
