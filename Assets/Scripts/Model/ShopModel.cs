@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class ShopModel : MonoBehaviour
 {
@@ -22,16 +23,16 @@ public class ShopModel : MonoBehaviour
     public BoolReactiveProperty isShowShop = new BoolReactiveProperty(false);
 
 
-    public void ShowAdInducationView()
+    public void ShowAdInducationView(Action showSop)
     {
         CBNativeDialog.Instance.Show(
             title: "ライフが足りません",
             message: "このトークを続けるには1つのライフが必要です。",
-            positiveButtonTitle: "ショップを開く",
-            positiveButtonAction: () => Debug.Log("ショップを開くメソッド"),
             negativeButtonTitle: "キャンセル",
-            negativeButtonAction: () => Debug.Log("dad")
-        );
+            negativeButtonAction: () => Debug.Log("dad"),
+            positiveButtonTitle: "ショップを開く",
+            positiveButtonAction: showSop
+        );;
     }
 
     public void DisableRewardButton(GameObject rewardPanel,bool isInteractabl)

@@ -32,7 +32,7 @@ public class Presenter : MonoBehaviour
             .Subscribe(async (q) => {
                 if (lifeModel.totalLife.Value <= 0)
                 {
-                    shopModel.ShowAdInducationView();
+                    shopModel.ShowAdInducationView(()=>bottomNaviModel.ChangeMode(BottomNaviModel.MODE.SHOP));
                     return;
                 }
                 talkModel.ShowAns(await talkModel.gptInstance.ChatGPT(q), talkView.chatPanel);
