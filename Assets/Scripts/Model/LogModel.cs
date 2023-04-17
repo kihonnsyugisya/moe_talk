@@ -28,12 +28,6 @@ public class LogModel : MonoBehaviour
 
         TextMeshProUGUI contentsText = contentsInstance.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
         contentsText.text = content;
-        //float contentBoxHeight = contentsText.rectTransform.sizeDelta.y;
-        //contentsText.ForceMeshUpdate();
-        //int contentLine = contentsText.textInfo.lineCount;
-        //contentsText.rectTransform.sizeDelta = new Vector2(contentsText.rectTransform.sizeDelta.x,contentLine * contentBoxHeight);
-
-        //contentsText.rectTransform.sizeDelta = new Vector2(contentsText.rectTransform.sizeDelta.x, contentsText.preferredHeight);
     }
 
     public BoolReactiveProperty isShowLog = new BoolReactiveProperty(false); 

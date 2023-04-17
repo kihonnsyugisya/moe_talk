@@ -1,20 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using UnityEngine.UI;
 using TMPro;
-using System;
+
 
 public class TalkModel : MonoBehaviour
 {
     // Start is called before the first frame update
-    async void Start()
+    void Start()
     {
         gptInstance = new GptCore();
-        
-        //var enter = await gptInstance.ChatGPT("応答してください");
-        //Debug.Log(enter);
     }
 
     // Update is called once per frame
@@ -32,13 +26,21 @@ public class TalkModel : MonoBehaviour
         ChatPanel.SetActive(true);
         TextMeshProUGUI ansewerText = ChatPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         ansewerText.text = ans;
+        ansewerText.pageToDisplay = 1;
         //Debug.Log("show ans");
+    }
+
+    public void NextAns(GameObject ChatPanel)
+    {
+        TextMeshProUGUI text = ChatPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        text.pageToDisplay ++;
+        if (text.textInfo.pageCount < text.pageToDisplay) ChatPanel.SetActive(false);
+
     }
 
     public void CloseAns(GameObject ChatPanel)
     {
         ChatPanel.SetActive(false);
-        //Debug.Log("close ans");
     }
 
     public void ShowChatWindow(TMP_InputField chatWindow)
