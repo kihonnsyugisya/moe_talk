@@ -87,21 +87,20 @@ public class Presenter : MonoBehaviour
             lifeModel.SetViewLife(shopView.yourLifePoint, x);
             lifeModel.SetViewLife(talkView.life, x);
         }).AddTo(this);
-        lifeModel.freeLife.Subscribe(x =>
+        lifeModel.freeLife.SkipLatestValueOnSubscribe().Subscribe(x =>
         {
             lifeModel.SetViewLife(shopView.freeLifePoint, x);
             userDataModel.SaveLife(PREFES_KEY.FREE_LIFE,x);
         }).AddTo(this);
-        lifeModel.paidLife.Subscribe(x =>
+        lifeModel.paidLife.SkipLatestValueOnSubscribe().Subscribe(x =>
         {
             lifeModel.SetViewLife(shopView.paidLifePoint, x);
             userDataModel.SaveLife(PREFES_KEY.PAID_LIFE,x);
         }).AddTo(this);
         lifeModel.SetInitialLife(userDataModel.judge_type);
 
-        //?????????????????
-        lifeModel.freeLife.Value = userDataModel.LoadLife(PREFES_KEY.FREE_LIFE);
-        lifeModel.paidLife.Value = userDataModel.LoadLife(PREFES_KEY.PAID_LIFE);
+        if (PlayerPrefs.HasKey(PREFES_KEY.FREE_LIFE.ToString())) lifeModel.freeLife.Value = userDataModel.LoadLife(PREFES_KEY.FREE_LIFE);
+        if (PlayerPrefs.HasKey(PREFES_KEY.PAID_LIFE.ToString())) lifeModel.paidLife.Value = userDataModel.LoadLife(PREFES_KEY.PAID_LIFE);
 
         iapModel.amount.Subscribe(amount => lifeModel.PlusPaidLife(shopView.paidLifePoint, amount)).AddTo(this);
 
@@ -114,7 +113,7 @@ public class Presenter : MonoBehaviour
             .Where(_ => Input.GetKey(KeyCode.Escape))
             .Subscribe(_ =>
             {
-                GptCore.CallMessages();
+                userDataModel.ResetPrefes();
             });
     }
 

@@ -33,51 +33,21 @@ public class UserDataModel : MonoBehaviour
         {
             judge_type = LOGIN_TYPE.ERROR_LOGIN;
         }
-
+        Debug.Log(judge_type.ToString());
         //今回取得した日付をセーブ
         PlayerPrefs.SetInt(PREFES_KEY.LAST_GET_DATA.ToString(), todayDate);
         PlayerPrefs.Save();
     }
 
-    public void d()
-    {
-        switch (judge_type)
-        {
-            //ログインボーナス
-            case LOGIN_TYPE.TODAY_LOGIN:
-
-                //初ログインボーナス　lastDateに0が入っていたら処理実行
-                if (lastDate == (int)LOGIN_TYPE.FIRST_USER_LOGIN)
-                {
-                    //初ログインボーナス処理
-                }
-                else
-                {
-                    //普通のログインボーナス処理
-                }
-
-                break;
-
-            //すでにログイン済み
-            case LOGIN_TYPE.ALREADY_LOGIN:
-                //なにもしない
-                break;
-
-            //不正ログイン
-            case LOGIN_TYPE.ERROR_LOGIN:
-                //不正ログイン時の処理
-                break;
-        }
-    }
-
     public int LoadLife(PREFES_KEY key)
     {
-        return PlayerPrefs.GetInt(key.ToString(), 0);
+        return PlayerPrefs.GetInt(key.ToString());
     }
 
     public void SaveLife(PREFES_KEY key, int value)
     {
         PlayerPrefs.SetInt(key.ToString(), value);
+        PlayerPrefs.Save();
     }
 
     public void LoadLog()
@@ -88,6 +58,13 @@ public class UserDataModel : MonoBehaviour
     public void SaveLog()
     {
 
+    }
+
+    public void ResetPrefes()
+    {
+        Debug.Log("delete all");
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
     }
 
 
