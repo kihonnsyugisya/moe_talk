@@ -19,9 +19,9 @@ public class LifeModel : MonoBehaviour
         
     }
 
-    [HideInInspector] public IntReactiveProperty freeLife = new();
-    [HideInInspector] public IntReactiveProperty paidLife = new();
-    [HideInInspector] public IntReactiveProperty totalLife = new();
+    public IntReactiveProperty freeLife = new();
+    public IntReactiveProperty paidLife = new();
+    public IntReactiveProperty totalLife = new();
 
     public void PlusFreeLife(TextMeshProUGUI freeLifePoint, int value)
     {
@@ -47,10 +47,10 @@ public class LifeModel : MonoBehaviour
         }
     }
 
-    public void SetInitialLife(LOGIN_TYPE lOGIN_TYPE)
+    public void SetInitialLife()
     {
         //1日一回の処理を入れる
-        if(lOGIN_TYPE == LOGIN_TYPE.TODAY_LOGIN) freeLife.Value = 3;
+        freeLife.Value = 3;
     }
 
     public void SetViewLife(TextMeshProUGUI lifeView,int value)
