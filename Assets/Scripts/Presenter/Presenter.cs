@@ -20,7 +20,6 @@ public class Presenter : MonoBehaviour
     public IapModel iapModel;
     public BottomNaviModel bottomNaviModel;
     public AvatarModel avatarModel;
-    public UserDataModel userDataModel;
 
     // Start is called before the first frame update
     void Start()
@@ -87,20 +86,9 @@ public class Presenter : MonoBehaviour
             lifeModel.SetViewLife(shopView.yourLifePoint, x);
             lifeModel.SetViewLife(talkView.life, x);
         }).AddTo(this);
-        lifeModel.freeLife.SkipLatestValueOnSubscribe().Subscribe(x =>
-        {
-            lifeModel.SetViewLife(shopView.freeLifePoint, x);
-            userDataModel.SaveLife(PREFES_KEY.FREE_LIFE,x);
-        }).AddTo(this);
-        lifeModel.paidLife.SkipLatestValueOnSubscribe().Subscribe(x =>
-        {
-            lifeModel.SetViewLife(shopView.paidLifePoint, x);
-            userDataModel.SaveLife(PREFES_KEY.PAID_LIFE,x);
-        }).AddTo(this);
-        lifeModel.SetInitialLife(userDataModel.judge_type);
-
-        if (PlayerPrefs.HasKey(PREFES_KEY.FREE_LIFE.ToString())) lifeModel.freeLife.Value = userDataModel.LoadLife(PREFES_KEY.FREE_LIFE);
-        if (PlayerPrefs.HasKey(PREFES_KEY.PAID_LIFE.ToString())) lifeModel.paidLife.Value = userDataModel.LoadLife(PREFES_KEY.PAID_LIFE);
+        lifeModel.freeLife.Subscribe(x => lifeModel.SetViewLife(shopView.freeLifePoint, x)).AddTo(this);
+        lifeModel.paidLife.Subscribe(x => lifeModel.SetViewLife(shopView.paidLifePoint, x)).AddTo(this);
+        lifeModel.SetInitialLife();
 
         iapModel.amount.Subscribe(amount => lifeModel.PlusPaidLife(shopView.paidLifePoint, amount)).AddTo(this);
 
@@ -113,7 +101,7 @@ public class Presenter : MonoBehaviour
             .Where(_ => Input.GetKey(KeyCode.Escape))
             .Subscribe(_ =>
             {
-                userDataModel.ResetPrefes();
+                GptCore.CallMessages();
             });
     }
 
