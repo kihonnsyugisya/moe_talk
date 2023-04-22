@@ -1,0 +1,34 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UniRx;
+using TMPro;
+using System;
+
+public class LogModel : MonoBehaviour
+{
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+    }
+
+
+    public void GenaleteLogContents(string role,string content,LogView logView)
+    {
+        GameObject contentsInstance;
+        contentsInstance = role == "assistant"
+            ? Instantiate(logView.aiContentsPanel, logView.contentsBox)
+            : Instantiate(logView.userContentsPanel, logView.contentsBox);
+
+        TextMeshProUGUI contentsText = contentsInstance.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
+        contentsText.text = content;
+    }
+
+    public BoolReactiveProperty isShowLog = new BoolReactiveProperty(false); 
+}
