@@ -2910,6 +2910,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   life:
     value: 0
+  isShowAns: 0
 --- !u!114 &830257366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3029,7 +3030,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5d3b806b10c9444cbb87ccaee1cdfd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  judge_type: 0
 --- !u!1 &850935954
 GameObject:
   m_ObjectHideFlags: 0
@@ -3088,7 +3088,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: "\u3048\u3063\u3001\u305F\u3053\u304C\u5ACC\u3044\u306A\u3093\u3067\u3059\u304B\uFF1F\u79C1\u306F\u305F\u3053\u304C\u597D\u304D\u306A\u306E\u3067\u3001\u5C11\u3057\u9A5A\u3044\u3066\u3044\u307E\u3059\u3002\u3067\u3082\u3001\u597D\u307F\u306F\u4EBA\u305D\u308C\u305E\u308C\u3067\u3059\u3088\u306D\u3002"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8aa0acb40482a4d4eacf7f86c63ee1a0, type: 2}
   m_sharedMaterial: {fileID: -7834675572165924540, guid: 8aa0acb40482a4d4eacf7f86c63ee1a0, type: 2}
@@ -5228,7 +5228,6 @@ MonoBehaviour:
   iapModel: {fileID: 830257370}
   bottomNaviModel: {fileID: 830257371}
   avatarModel: {fileID: 830257372}
-  userDataModel: {fileID: 830257373}
 --- !u!4 &1295259702
 Transform:
   m_ObjectHideFlags: 0

@@ -17,17 +17,20 @@ public class TalkModel : MonoBehaviour
         
     }
 
-    public GptCore gptInstance;
+    [HideInInspector] public GptCore gptInstance;
 
-    public IntReactiveProperty life;
+    [HideInInspector] public IntReactiveProperty life;
+
+    [HideInInspector] public bool isShowAns = false;
 
     public void ShowAns(string ans,GameObject ChatPanel)
     {
+        if (isShowAns) return;
         ChatPanel.SetActive(true);
+        isShowAns = true;
         TextMeshProUGUI ansewerText = ChatPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         ansewerText.text = ans;
         ansewerText.pageToDisplay = 1;
-        //Debug.Log("show ans");
     }
 
     public void NextAns(GameObject ChatPanel)
@@ -40,7 +43,9 @@ public class TalkModel : MonoBehaviour
 
     public void CloseAns(GameObject ChatPanel)
     {
+        if (!isShowAns) return;
         ChatPanel.SetActive(false);
+        isShowAns = false;
     }
 
     public void ShowChatWindow(TMP_InputField chatWindow)

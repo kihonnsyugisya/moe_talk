@@ -37,7 +37,7 @@ public class Presenter : MonoBehaviour
                 }
                 talkModel.ShowAns(await talkModel.gptInstance.ChatGPT(q), talkView.chatPanel);
                 talkModel.CleanChatWindow(talkView.chatWindow);
-                lifeModel.MinusLife(shopView.freeLifePoint, shopView.paidLifePoint, 1);
+                if(GptCore.requestStatus.Value != WebRequestStatus.ERROR.ToString()) lifeModel.MinusLife(shopView.freeLifePoint, shopView.paidLifePoint, 1);
             }).AddTo(this);
         talkView.nextButton.OnClickAsObservable().Subscribe(_ => talkModel.NextAns(talkView.chatPanel)).AddTo(this);
         talkView.chatWindow.onDeselect.AddListener(_ => bottomNaviModel.ChangeMode(BottomNaviModel.MODE.NONE));
@@ -68,7 +68,13 @@ public class Presenter : MonoBehaviour
             if (status == WebRequestStatus.WAITING.ToString())
             {
                 talkView.chatWindow.readOnly = true;
-                avatarView.animator.SetBool("THINKING",true);
+                avatarView.animator.SetBool("THINKING", true);
+            }
+            else if (status == WebRequestStatus.ERROR.ToString())
+            {
+                talkView.chatWindow.readOnly = false;
+                avatarView.animator.SetTrigger("SAD");
+                avatarView.animator.SetBool("THINKING", false);
             }
             else {
                 talkView.chatWindow.readOnly = false;
@@ -82,7 +88,7 @@ public class Presenter : MonoBehaviour
             bottomNaviModel.ShowPanel(shopView.rewardPanel,value);
             shopModel.DisableRewardButton(shopView.rewardPanel, adMobModel.isOnAdLoadedRewardedAd.Value);
         }).AddTo(this);
-        adMobModel.amountValue.Subscribe(amount => lifeModel.PlusFreeLife(shopView.freeLifePoint, amount));
+        adMobModel.amountValue.Subscribe(amount => lifeModel.PlusPaidLife(shopView.freeLifePoint, amount));
 
         lifeModel.totalLife.Subscribe(x =>
         {
@@ -96,9 +102,9 @@ public class Presenter : MonoBehaviour
         iapModel.amount.Subscribe(amount => lifeModel.PlusPaidLife(shopView.paidLifePoint, amount)).AddTo(this);
 
         bottomNaviModel.isNone.Subscribe(_ => bottomNaviModel.SelectColorControll(shopView.shopButton, shopView.bottomText, false)).AddTo(this);
-        bottomNaviModel.isShop.Subscribe(value => { bottomNaviModel.ShowPanel(shopView.shopPanel, value); bottomNaviModel.SelectColorControll(shopView.shopButton, shopView.bottomText, value); talkModel.CloseAns(talkView.chatPanel); }).AddTo(this);
-        bottomNaviModel.isTalk.Subscribe(value => { bottomNaviModel.SelectColorControll(talkView.talkButton, talkView.bottomText, value); talkModel.CloseAns(talkView.chatPanel); }).AddTo(this);
-        bottomNaviModel.isLog.Subscribe(value => { bottomNaviModel.ShowPanel(logView.logPanel, value); bottomNaviModel.SelectColorControll(logView.logButton, logView.bottomText, value); talkModel.CloseAns(talkView.chatPanel); }).AddTo(this);
+        bottomNaviModel.isShop.Subscribe(value => { bottomNaviModel.ShowPanel(shopView.shopPanel, value); bottomNaviModel.SelectColorControll(shopView.shopButton, shopView.bottomText, value); talkModel.CloseAns(talkView.chatPanel); Debug.Log("1"); }).AddTo(this);
+        bottomNaviModel.isTalk.Subscribe(value => { bottomNaviModel.SelectColorControll(talkView.talkButton, talkView.bottomText, value); talkModel.CloseAns(talkView.chatPanel); Debug.Log("2"); }).AddTo(this);
+        bottomNaviModel.isLog.Subscribe(value => { bottomNaviModel.ShowPanel(logView.logPanel, value); bottomNaviModel.SelectColorControll(logView.logButton, logView.bottomText, value); talkModel.CloseAns(talkView.chatPanel); Debug.Log("3"); }).AddTo(this);
 
         this.UpdateAsObservable()
             .Where(_ => Input.GetKey(KeyCode.Escape))
