@@ -3030,6 +3030,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5d3b806b10c9444cbb87ccaee1cdfd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  judge_type: 0
 --- !u!1 &850935954
 GameObject:
   m_ObjectHideFlags: 0
@@ -5228,6 +5229,7 @@ MonoBehaviour:
   iapModel: {fileID: 830257370}
   bottomNaviModel: {fileID: 830257371}
   avatarModel: {fileID: 830257372}
+  userDataModel: {fileID: 830257373}
 --- !u!4 &1295259702
 Transform:
   m_ObjectHideFlags: 0
