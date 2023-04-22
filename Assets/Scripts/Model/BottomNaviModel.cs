@@ -35,7 +35,7 @@ public class BottomNaviModel : MonoBehaviour
         {
             case MODE.NONE:
                 isNone.Value = !isNone.Value;
-                isShop.Value = isTalk.Value = isLog.Value = false;
+                isShop.Value = isLog.Value = false;
                 break;
             case MODE.TALK:
                 isTalk.Value = !isTalk.Value;

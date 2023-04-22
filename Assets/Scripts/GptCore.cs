@@ -106,23 +106,32 @@ public class GptCore
         request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
 
         requestStatus.Value = WebRequestStatus.WAITING.ToString();
-        await request.SendWebRequest();
+
+        try
+        {
+            await request.SendWebRequest();
+        } catch (UnityWebRequestException)
+        {
+            switch (request.result)
+            {
+                case UnityWebRequest.Result.Success:
+                case UnityWebRequest.Result.InProgress:
+                    Debug.LogError($"HTTP Request waiting!!");
+                    requestStatus.Value = WebRequestStatus.WAITING.ToString();
+                    break;
+                case UnityWebRequest.Result.ConnectionError:
+                default:
+                    //Debug.LogError($"HTTP Request Error: {request.error}");
+                    Debug.Log("失敗");
+                    requestStatus.Value = WebRequestStatus.ERROR.ToString();
+                    return "net work error";
+            }
+        }
+
+        string responseText = request.downloadHandler.text;
         requestStatus.Value = WebRequestStatus.SUCCESS.ToString();
-
-
-        // HTTPレスポンスの受信と解析
-        if (request.result != UnityWebRequest.Result.Success)
-        {
-            Debug.LogError($"HTTP Request Error: {request.error}");
-            Debug.Log("失敗");
-            return request.error;
-        }
-        else
-        {
-            string responseText = request.downloadHandler.text;
-            Debug.Log($"HTTP Response Body: {responseText}");
-            Debug.Log(content);
-        }
+        Debug.Log($"HTTP Response Body: {responseText}");
+        Debug.Log(content);
 
 
         string encodingResult = System.Text.Encoding.UTF8.GetString(request.downloadHandler.data);
@@ -201,7 +210,7 @@ public enum EMOTIONS
 
 public enum WebRequestStatus 
 {
-    SUCCESS,WAITING,DEFAULT
+    SUCCESS,WAITING,DEFAULT,ERROR
 }
 
 //プロンプトの日本語文（これを翻訳してsystemにぶち込む）
