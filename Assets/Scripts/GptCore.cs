@@ -15,8 +15,9 @@ public class GptCore
     const string API_URL = "https://api.openai.com/v1/chat/completions";
     private string API_KEY = env.CHAT_GPT_API_KEY;
     const float TEMPERATURE = 0f;
-    const int MAX_TOKENS = 1000;
+    const int MAX_TOKENS = 900;
     const string MODEL = "gpt-3.5-turbo";
+    const int MESSAGE_LIMIT = 8;
     public static StringReactiveProperty requestStatus = new(WebRequestStatus.DEFAULT.ToString());
 
     public static ReactiveDictionary<EMOTIONS, int> emotionData = new()
@@ -93,8 +94,8 @@ public class GptCore
         };
         messageBox.Add(userMessage);
 
-        if (!requestParam.ContainsKey("messages")) requestParam.Add("messages", messageBox);
-        else requestParam["messages"] = messageBox;
+        if (!requestParam.ContainsKey("messages")) requestParam.Add("messages", LimitedMessageBox(MESSAGE_LIMIT));
+        else requestParam["messages"] = LimitedMessageBox(MESSAGE_LIMIT);
 
         string jsonData = JsonConvert.SerializeObject(requestParam, Formatting.Indented);
 
@@ -166,8 +167,8 @@ public class GptCore
         }
         catch (JsonReaderException e)
         {
-            Debug.Log("前提条件を再セット");
-            InitialGPT();
+            //Debug.Log("前提条件を再セット");
+            //InitialGPT();
             emotionData.Clear();
             Debug.Log(e);
         }
@@ -184,6 +185,27 @@ public class GptCore
         messageBox.Add(assistantMessage);
 
         return result;
+    }
+
+    private ReactiveCollection<Message> LimitedMessageBox(int limit)
+    {
+        if (messageBox.Count > limit)
+        {
+            Debug.Log(messageBox.Count + "ddddd");
+            int deleteIndexFromTop = messageBox.Count - limit;
+            ReactiveCollection<Message> limitedMessage = new();
+            int counter = 0;
+            foreach (var message in messageBox)
+            {
+                if (message.role != "system") counter++;
+                else limitedMessage.Add(message);
+                if (counter < deleteIndexFromTop) continue;
+                limitedMessage.Add(message);
+                Debug.Log("role " + message.role + " content " + message.content);
+            }
+            return limitedMessage;
+        }
+        return messageBox;
     }
 
     string Translate(string lang)
