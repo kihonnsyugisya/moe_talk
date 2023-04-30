@@ -60,6 +60,15 @@ public class Presenter : MonoBehaviour
             .AddTo(this);
 
         GptCore.emotionData
+            .ObserveAdd()
+            .Subscribe(pair => {
+                avatarView.animator.SetLayerWeight(1, pair.Value / 10f);
+                avatarView.animator.Play(avatarView.TranslateEmoToFaceState(pair.Key));
+                avatarView.animator.SetTrigger(pair.Key.ToString());
+            })
+            .AddTo(this);
+
+        GptCore.emotionData
             .ObserveReset()
             .Subscribe(_=>avatarView.ResetFace())
             .AddTo(this);
@@ -114,14 +123,16 @@ public class Presenter : MonoBehaviour
         iapModel.amount.Subscribe(amount => lifeModel.PlusPaidLife(shopView.paidLifePoint, amount)).AddTo(this);
 
         bottomNaviModel.isNone.Subscribe(_ => bottomNaviModel.SelectColorControll(shopView.shopButton, shopView.bottomText, false)).AddTo(this);
-        bottomNaviModel.isShop.Subscribe(value => { bottomNaviModel.ShowPanel(shopView.shopPanel, value); bottomNaviModel.SelectColorControll(shopView.shopButton, shopView.bottomText, value); talkModel.CloseAns(talkView.chatPanel);}).AddTo(this);
+        bottomNaviModel.isShop.Subscribe(value => { bottomNaviModel.ShowPanel(shopView.shopPanel, value); bottomNaviModel.SelectColorControll(shopView.shopButton, shopView.bottomText, value); talkModel.CloseAns(talkView.chatPanel); }).AddTo(this);
         bottomNaviModel.isTalk.Subscribe(value => { bottomNaviModel.SelectColorControll(talkView.talkButton, talkView.bottomText, value); talkModel.CloseAns(talkView.chatPanel);}).AddTo(this);
         bottomNaviModel.isLog.Subscribe(value => { bottomNaviModel.ShowPanel(logView.logPanel, value); bottomNaviModel.SelectColorControll(logView.logButton, logView.bottomText, value); talkModel.CloseAns(talkView.chatPanel);}).AddTo(this);
 
         this.UpdateAsObservable()
             .Where(_ => Input.GetKey(KeyCode.Escape))
+            .ThrottleFirst(TimeSpan.FromMilliseconds(1000))
             .Subscribe(_ =>
             {
+                GptCore ind = new();
                 foreach (var d in GptCore.messageBox)
                 {
                     Debug.Log(d.content);
