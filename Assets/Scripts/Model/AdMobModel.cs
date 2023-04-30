@@ -9,9 +9,10 @@ using UniRx;
 
 public class AdMobModel : MonoBehaviour
 {
-    public BoolReactiveProperty isOnAdLoadedRewardedAd = new();
+    [HideInInspector]public BoolReactiveProperty isOnAdLoadedRewardedAd = new();
+    [HideInInspector] public IntReactiveProperty amountValue = new(0);
     private RewardedAdGameObject rewardedAd;
-    public IntReactiveProperty amountValue = new(0); 
+
     // Start is called before the first frame update
     void Start()
     {

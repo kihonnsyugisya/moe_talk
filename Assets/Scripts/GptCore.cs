@@ -161,7 +161,6 @@ Format:
 
 
         string encodingResult = System.Text.Encoding.UTF8.GetString(request.downloadHandler.data);
-        //Debug.Log(result);
 
         Dictionary<string, object> responseParam = JsonConvert.DeserializeObject<Dictionary<string, object>>(encodingResult);
         //Debug.Log(responseParam["choices"]);
@@ -170,7 +169,7 @@ Format:
         //Debug.Log(choicesResponseParam[0]["message"]);
 
         Message messageResponseParam = JsonConvert.DeserializeObject<Message>(choicesResponseParam[0]["message"].ToString());
-        //Debug.Log(messageResponseParam.content);
+        Debug.Log(messageResponseParam.content);
 
         string result = messageResponseParam.content;
 
