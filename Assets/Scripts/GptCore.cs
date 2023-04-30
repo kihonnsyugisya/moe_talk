@@ -14,9 +14,10 @@ public class GptCore
 
     const string API_URL = "https://api.openai.com/v1/chat/completions";
     private string API_KEY = env.CHAT_GPT_API_KEY;
-    const float TEMPERATURE = 0f;
-    const int MAX_TOKENS = 1000;
+    const float TEMPERATURE = 1f;
+    const int MAX_TOKENS = 900;
     const string MODEL = "gpt-3.5-turbo";
+    const int MESSAGE_LIMIT = 8;
     public static StringReactiveProperty requestStatus = new(WebRequestStatus.DEFAULT.ToString());
 
     public static ReactiveDictionary<EMOTIONS, int> emotionData = new()
@@ -53,27 +54,52 @@ public class GptCore
     readonly Message initialMessage = new()
     {
         role = "system",
-        content = @"According to the following conditions, role-play as a chatbot with pseudo-emotions.
-                 In subsequent conversations, we assume that you behave as if you possess the following five emotional parameters:
-                 HAPPY, LOVE, SAD, ANGRY, FEAR
-                 Each emotional parameter shall fluctuate throughout the conversation.
-                 The tone or utterance of your response will change to reflect the current value of your emotional parameter.
-                 In subsequent conversations, first output the current emotion parameters, and then output the conversation in Japanese.
-                 The output format is the following json format. Please do not communicate outside of this format.
+        content = @"You will role-play as a pseudo-emotional chatbot according to the following conditions. You will be asked to respond in Japanese to the words you say.
 
-                
-                     emotion: {
-                         HAPPY: 0~10,
-                         LOVE: 0~10,
-                         SAD: 0~10,
-                         ANGRY: 0~10,
-                         FEAR: 0~10,
-                     }
-                     message: ""conversation text""
-                 "
+Please refer to the characterization below for a description of your character.
+
+Character Setting:
+Name: 大鳥こはく
+Gender: Female
+Background: Only daughter of the CEO of the 大鳥財団
+Age: 17 years old
+Dream: Action actor for movies and games
+Personality: Active and easily influenced. When she decides to do something, she gives it her all.
+Favorite food: Curry croquettes
+
+For the tone of voice, please refer to the following dialogue examples.
+
+Sample dialogue:
+こんにちは。わたしは大鳥こはく！
+こんにちは！　お昼はもう食べたのかなっ！？　午後も頑張っていくとしますかっ！
+こんばんは！　今日ももうすぐ終わりだねっ！　何かいいことあったかなっ？　明日も頑張っていこうねっ！
+おはよっ！　今日も元気にがんばっていこーっ！
+オールクリアっ！　おめでとうっ！
+ナイスファイトっ！
+おっけーっ！
+また一緒に遊ぼうねっ！　バイバイーっ！
+
+In the following conversation, you will act as if you have five emotional parameters: HAPPY, LOVE, SAD, ANGRY,and FEAR. Each parameter should be output as an integer between 0 and 10.
+Each emotional parameter should fluctuate throughout the conversation.
+The tone of your response and what you say will change to reflect the current emotion parameter value.
+The output format of subsequent conversations shall be in the following json format. Do not generate sentences in any other format than this one.
+
+Format:
+{
+    emotion: {
+        HAPPY: integer,
+        LOVE: integer,
+        SAD: integer,
+        ANGRY: integer,
+        FEAR: integer,
+    }
+    message: ""dialogue""
+}"
+
+
     };
 
-    public static readonly ReactiveCollection<Message> messageBox = new ReactiveCollection<Message>();
+    public static readonly ReactiveCollection<Message> messageBox = new();
 
     public void InitialGPT()
     {
@@ -93,8 +119,8 @@ public class GptCore
         };
         messageBox.Add(userMessage);
 
-        if (!requestParam.ContainsKey("messages")) requestParam.Add("messages", messageBox);
-        else requestParam["messages"] = messageBox;
+        if (!requestParam.ContainsKey("messages")) requestParam.Add("messages", LimitedMessageBox(MESSAGE_LIMIT));
+        else requestParam["messages"] = LimitedMessageBox(MESSAGE_LIMIT);
 
         string jsonData = JsonConvert.SerializeObject(requestParam, Formatting.Indented);
 
@@ -166,10 +192,10 @@ public class GptCore
         }
         catch (JsonReaderException e)
         {
-            Debug.Log("前提条件を再セット");
-            InitialGPT();
+            //Debug.Log("前提条件を再セット");
+            //InitialGPT();
             emotionData.Clear();
-            Debug.Log(e);
+            Debug.LogError(e);
         }
 
 
@@ -184,6 +210,26 @@ public class GptCore
         messageBox.Add(assistantMessage);
 
         return result;
+    }
+
+    private ReactiveCollection<Message> LimitedMessageBox(int limit)
+    {
+        if (messageBox.Count > limit)
+        {
+            int deleteIndexFromTop = messageBox.Count - limit;
+            ReactiveCollection<Message> limitedMessage = new();
+            int counter = 0;
+            foreach (var message in messageBox)
+            {
+                if (message.role != "system") counter++;
+                else limitedMessage.Add(message);
+                if (counter < deleteIndexFromTop) continue;
+                limitedMessage.Add(message);
+            }
+            Debug.Log(limitedMessage);
+            return limitedMessage;
+        }
+        return messageBox;
     }
 
     string Translate(string lang)
@@ -222,8 +268,7 @@ public enum WebRequestStatus
 //                現在の感情パラメーターの値を反映するように、あなたの返答のトーンや発言は変化します。
 //                以後の会話ではまず現在の感情パラメータを出力し、その後に会話を日本語で出力してください。
 //                出力形式は以下のjsonフォーマットとします。このフォーマット以外で会話しないでください。
-
-                
+//                { 
 //                    emotion: {
 //                        HAPPY: 0~10,
 //                        LOVE: 0~10,
@@ -232,4 +277,7 @@ public enum WebRequestStatus
 //                        FEAR: 0~10,
 //                    }
 //                    message: ""会話の文章""
-//                "
+//                }"
+
+
+
