@@ -79,22 +79,8 @@ Sample dialogue:
 おっけーっ！
 また一緒に遊ぼうねっ！　バイバイーっ！
 
-In the following conversation, you will act as if you have five emotional parameters: HAPPY, LOVE, SAD, ANGRY,and FEAR. Each parameter should be output as an integer between 0 and 10.
-Each emotional parameter should fluctuate throughout the conversation.
-The tone of your response and what you say will change to reflect the current emotion parameter value.
-The output format of subsequent conversations shall be in the following json format. Do not generate sentences in any other format than this one.
 
-Format:
-{
-    emotion: {
-        HAPPY: integer,
-        LOVE: integer,
-        SAD: integer,
-        ANGRY: integer,
-        FEAR: integer,
-    }
-    message: ""dialogue""
-}"
+"
 
 
     };
@@ -194,6 +180,7 @@ Format:
             //Debug.Log("前提条件を再セット");
             //InitialGPT();
             emotionData.Clear();
+            
             Debug.LogError(e);
         }
 
@@ -246,11 +233,14 @@ Format:
         }
     }
 
+
 }
+
+
 
 public enum EMOTIONS
 {
-    HAPPY,LOVE,SAD,ANGRY,FEAR
+    HAPPY = 0,LOVE,SAD,ANGRY,FEAR
 }
 
 public enum WebRequestStatus 

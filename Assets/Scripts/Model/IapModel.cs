@@ -25,7 +25,7 @@ public class IapModel : MonoBehaviour
     {
         if (product.definition.id == ITEM1)
         {
-            amount.SetValueAndForceNotify(1);
+            amount.SetValueAndForceNotify(5);
         }
     }
 

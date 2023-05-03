@@ -52,25 +52,20 @@ public class Presenter : MonoBehaviour
 
         GptCore.emotionData
             .ObserveReplace()
-            .Subscribe(pair => {
-                avatarView.animator.SetLayerWeight(1, pair.NewValue / 10f);
-                avatarView.animator.Play(avatarView.TranslateEmoToFaceState(pair.Key));
-                avatarView.animator.SetTrigger(pair.Key.ToString());
-            })
+            .Subscribe(pair => {avatarView.PlayAnimation(pair.Key,pair.NewValue);})
             .AddTo(this);
 
         GptCore.emotionData
             .ObserveAdd()
-            .Subscribe(pair => {
-                avatarView.animator.SetLayerWeight(1, pair.Value / 10f);
-                avatarView.animator.Play(avatarView.TranslateEmoToFaceState(pair.Key));
-                avatarView.animator.SetTrigger(pair.Key.ToString());
-            })
+            .Subscribe(pair => { avatarView.PlayAnimation(pair.Key, pair.Value); })
             .AddTo(this);
 
         GptCore.emotionData
             .ObserveReset()
-            .Subscribe(_=>avatarView.ResetFace())
+            .Subscribe(_=> {
+                avatarView.ResetFace();
+                avatarView.FortuneEmotion();
+            })
             .AddTo(this);
 
         GptCore.requestStatus.DistinctUntilChanged().Subscribe(status => 

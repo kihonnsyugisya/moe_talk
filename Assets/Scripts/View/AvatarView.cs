@@ -38,4 +38,21 @@ public class AvatarView : MonoBehaviour
         animator.SetLayerWeight(1, 0f);
     }
 
+    public void PlayAnimation(EMOTIONS emo,int value)
+    {
+        animator.SetLayerWeight(1, value / 10f);
+        animator.Play(TranslateEmoToFaceState(emo));
+        animator.SetTrigger(emo.ToString());
+    }
+
+    public void FortuneEmotion()
+    {
+        int fortune = Random.Range(0, 10);
+        if (fortune > System.Enum.GetNames(typeof(EMOTIONS)).Length) return;
+        EMOTIONS emo = (EMOTIONS)fortune;
+        animator.SetLayerWeight(1, Random.Range(0f, 1.1f));
+        animator.Play(TranslateEmoToFaceState(emo));
+        animator.SetTrigger(emo.ToString());
+    }
+
 }
