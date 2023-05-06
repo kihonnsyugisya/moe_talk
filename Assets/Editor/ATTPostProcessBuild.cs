@@ -1,31 +1,40 @@
-#if UNITY_IOS
- 
+
 using UnityEditor;
 using UnityEditor.Callbacks;
+#if UNITY_IOS
 using UnityEditor.iOS.Xcode;
-//20221206ATTのFrameとinfo.plistを自動で追加するスクリプト
+#endif
+using System.IO;
  
-public static class ATTPostProcessBuild
+public class ATTPostProcessBuild
 {
-    [PostProcessBuild]//ビルド時に実行する
-    private static void OnPostProcessBuild(BuildTarget buildTarget, string buildPath)
-    {
-        // Info.plist に Privacy - Tacking Usage Description(NSUserTrackingUsageDescription)を追加する（ステップ２）
-        string infoPlistPath = buildPath + "/Info.plist";
-        PlistDocument infoPlist = new PlistDocument();
-        infoPlist.ReadFromFile(infoPlistPath);
-        PlistElementDict root = infoPlist.root;
-        root.SetString("NSUserTrackingUsageDescription", "あなたの好みに合わせた広告を表示するために使用されます");
-        infoPlist.WriteToFile(infoPlistPath);
+    // Set the IDFA request description:
+    const string k_TrackingDescription = "私たちは、あなたが使用しているアプリに基づいて、あなたにとって最も興味深いアプリや製品の広告を表示しようとしています。";
  
-        // PBXProjectクラスというのを用いてAppTrackingTransparency.frameworkを追加していきます（ステップ３）
-        string pbxProjectPath = PBXProject.GetPBXProjectPath(buildPath);
-        PBXProject pbxProject = new PBXProject();
-        pbxProject.ReadFromFile(pbxProjectPath);
-        string targetGuid = pbxProject.GetUnityFrameworkTargetGuid();
-        pbxProject.AddFrameworkToProject(targetGuid, "AppTrackingTransparency.framework", true);
-        pbxProject.WriteToFile(pbxProjectPath);
+    [PostProcessBuild(0)]
+    public static void OnPostProcessBuild(BuildTarget buildTarget, string pathToXcode) {
+        if (buildTarget == BuildTarget.iOS) {
+            AddPListValues(pathToXcode);
+        }
+    }
+ 
+    // Implement a function to read and write values to the plist file:
+    static void AddPListValues(string pathToXcode) {
+        // Retrieve the plist file from the Xcode project directory:
+        string plistPath = pathToXcode + "/Info.plist";
+        PlistDocument plistObj = new PlistDocument();
+ 
+ 
+        // Read the values from the plist file:
+        plistObj.ReadFromString(File.ReadAllText(plistPath));
+ 
+        // Set values from the root object:
+        PlistElementDict plistRoot = plistObj.root;
+ 
+        // Set the description key-value in the plist:
+        plistRoot.SetString("NSUserTrackingUsageDescription", k_TrackingDescription);
+ 
+        // Save changes to the plist:
+        File.WriteAllText(plistPath, plistObj.WriteToString());
     }
 }
- 
-#endif
